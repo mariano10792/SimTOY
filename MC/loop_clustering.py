@@ -6,9 +6,9 @@ import os,sys
 command = ""
 for N in range(200,201):
 	for iDC in range(0,1):
-		DC=iDC*50
-		for A in [210,240,270,300,330]: 
-			for B in [10,20,30,40]: 
+		DC=iDC*10
+		for A in [1,10,100,1000]: 
+			for B in [1,10,100,1000]: 
 				for R in range(1,2): 
 					command += "./skExtract.exe -c extractConfig.xml MC_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".fits -o output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
 command = command[:-2]     

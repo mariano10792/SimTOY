@@ -126,7 +126,7 @@ for (int j = 0; j < N0; ++j){
 	vector<double> BB(N0); //constante 2 formula sigma cuadrado a1/E(y_w)
 
 */
-  
+
 	vector<double> electrons(N0);
     vector<double> sigma(N0);
 
@@ -175,11 +175,11 @@ for (int j = 0; j < N0; ++j){
     // proportional to the square root of zz depth
     // AA y BB variables from Moroni 2015.
 
-    // h5->Fill(sigma[j] = pow(AA[j]*log(BB[j]*zz[j]+1),0.5));
-    
+    sigma[j] = pow(A*log(B*zz[j]+1),0.5);
+
     // Reference:
-    sigma[j] = pow(-A*log(abs((B/10000)*zz[j]-1)),0.5);
-    
+    //sigma[j] = pow(-A*log(abs((B/10000)*zz[j]-1)),0.5);
+
     //cout << "sigma = "<< sigma[j] << endl;
 
     ////////////////////////////////////////////////////////////////////
@@ -232,13 +232,13 @@ void addDC(TH2F *h2p_DC, TH2F *h2p_TOTAL, int darkC){
 		//int xdc=XDC.Uniform(0,xSize);
 		//TRandom3 YDC(0); //  seed=0  ->  different numbers every time
 		//int ydc=YDC.Uniform(0,ySize);
-		
+
 	    //double xdc =  rand() % xSize;
         //double ydc =  rand() % ySize;
         //h2p_DC->Fill(xdc,ydc);
         //h2p_TOTAL->Fill(xdc,ydc);
 	//}
-	
+
 		vector<int> xdc(darkC);
 		vector<int> ydc(darkC);
 
@@ -254,7 +254,7 @@ void addDC(TH2F *h2p_DC, TH2F *h2p_TOTAL, int darkC){
 		xdc[i]=XDC.Uniform(0,xSize);
 
 	}
-	
+
 		for (int i = 0; i < darkC; ++i){
 
 		h2p_DC->Fill(xdc[i],ydc[i]);
@@ -315,7 +315,7 @@ cout<< "Starting to save fits files ..."<<endl;
 */
 ///////////////  Real Interactions + Dark Current///////////////////////
 
-	std::string outMeanFitsFile3 = "/home/babieca/Escritorio/SimTOY/MC/MC_N0=";
+	std::string outMeanFitsFile3 = "./MC/MC_N0=";
     fitsfile *outClusterptr3;
     fits_create_file(&outClusterptr3, (outMeanFitsFile3+std::to_string(N0)+"_DC="+std::to_string(darkC)+"_A="+ std::to_string(A)+"_B="+ std::to_string(B)+"_R="+ std::to_string(R)+".fits").c_str(), &status);
 	fits_create_img(outClusterptr3, -32, naxis, naxesOut, &status);
@@ -452,7 +452,7 @@ cout<<"Content of pix variables saved into fits files"<<endl;
 	h2p_TOTAL->Draw("COLZ"); // Interactions + Dark Current
 
 // Print TCanvas into pdf
-	TString ps = "/home/babieca/Escritorio/SimTOY/MC/CCD_N0"+std::to_string(N0)+"DC"+std::to_string(darkC)+"A"+ std::to_string(A)+"B"+ std::to_string(B)+"R"+ std::to_string(R)+".pdf";
+	TString ps = "./MC/CCD_N0"+std::to_string(N0)+"DC"+std::to_string(darkC)+"A"+ std::to_string(A)+"B"+ std::to_string(B)+"R"+ std::to_string(R)+".pdf";
 	ch2p2->Print(ps+"[");
 	ch2p2->Print(ps);
 	ch2p2->Print(ps+"]");
