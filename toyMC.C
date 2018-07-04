@@ -35,7 +35,7 @@ using namespace std;
 
 // Internal Parameters /////////////////////////////////////////////////
 // CCD size. Real size: 4126 x 866.
-int nx = 500;           // Number of pixels in x-direction
+int nx = 250;           // Number of pixels in x-direction
 int ny = 50;            // Number of pixels in y-direction
 int pixSize= 15;        // Pixel size side in microns
 int xSize = nx*pixSize; // x CCD size in microns
@@ -367,7 +367,7 @@ int N0 = atoi(argv[1]);    // N0 represents the number of X-rays that interact w
 int darkC = atoi(argv[2]); // Dark Current total events
 
 int A = atoi(argv[3]); // first parameter to fit (2D/a1*nu)
-int B = atoi(argv[4]); // second parameter to fit (a1/E(y_w))
+int B = atoi(argv[4])/100; // second parameter to fit (a1/E(y_w))
 
 int R = atoi(argv[5]); // RUN number // only to label simulations with the same parameters
 
