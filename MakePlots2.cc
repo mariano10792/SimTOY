@@ -42,8 +42,8 @@ int nbins=(xmax-xmin+1)*2;
 
 TH1D *h2 = new TH1D("ohdu2", "Prueba", nbins, xmin, xmax);
 TH1D *h3 = new TH1D("ohdu3", "Prueba", nbins, xmin, xmax);
-TH1D *h4 = new TH1D("ohdu4", "Prueba", nbins, xmin, xmax);
-TH1D *h5 = new TH1D("ohdu5", "Prueba", nbins, xmin, xmax);
+//TH1D *h4 = new TH1D("ohdu4", "Prueba", nbins, xmin, xmax);
+//TH1D *h5 = new TH1D("ohdu5", "Prueba", nbins, xmin, xmax);
 
 // Open the file containing the tree.
 TFile *myFile = TFile::Open("./55Fe_exp.root");
@@ -73,7 +73,7 @@ TTreeReaderValue<Int_t> xPix(myReader, "xPix");
 TTreeReaderValue<Int_t> yPix(myReader, "yPix");
 TTreeReaderValue<Float_t> ePix(myReader, "ePix");
 
-TFile *myFile2 = TFile::Open("./MC/output_N0=400_DC=0_A=1_B=1.root");
+TFile *myFile2 = TFile::Open("./MC/output_N0=200_DC=0_A=1_B=125.root");
 TTreeReader myReader2("hitSumm", myFile2);
 
 TTreeReaderValue<Float_t> n2(myReader2, "n");
@@ -118,7 +118,7 @@ TTreeReaderValue<Float_t> ePix2(myReader2, "ePix");
     while (myReader2.Next()) {
        // Just access the data as if myPx and myPy were iterators (note the '*'
        // in front of them):
-       if (*e2>1350 && *e2<1650 && *xPix2>250 && *ePix2>3 && *xBary2>10 && *xBary2<490 && *yBary2>5 && *yBary2<45){
+       if (*e2>1350 && *e2<1650 && *ePix2>3 && *xBary2>10 && *xBary2<490 && *yBary2>5 && *yBary2<45){
          h3->Fill(*n2);
        }
        // if (*e>4 && *ohdu==4){

@@ -83,7 +83,7 @@ void MakePlots(){
 
 // Monte Carlo Data ////////////////////////////////////////////////////
 
-    TFile * f_mc = TFile::Open("output_N0=200_DC=0_A=1_B=1_R=1.root");
+    TFile * f_mc = TFile::Open("output_N0=200_DC=0_A=1_B=150.root");
         if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
     TTree * tmc    = (TTree*) f_mc->Get("hitSumm");
     TH1D * h_mc_n      =  new TH1D("h_mc_n"        , "Distribucion de tamanio de clusters", nbins, xmin, xmax);
@@ -122,14 +122,14 @@ void MakePlots(){
     tmc->GetEntry(i_event);
 
 		if (e>emin & e<emax){  // Condition over the number of electrons
-			if (xBary>10 & xBary<490){  // Condition over position
+			if (xBary>10 & xBary<245){  // Condition over position
 				if (yBary>5 & yBary<45){  // Condition over position
           if (ePix>3){  // Condition over DC
-            if (xPix>250){  // Condition over CCD used area
+           
 
 					// Fill the histogram with the variable n
 					h_mc_n -> Fill(n);
-        }
+        
 				}
 			}
 		}
@@ -146,14 +146,14 @@ void MakePlots(){
 	h_exp_n -> SetMarkerStyle(22);              h_mc_n -> SetMarkerStyle(23);
 
     int norm=1; //Normalization
-  // cc_s->SetLogy(1);
-//    Double_t scale_exp = norm/h_exp_n->Integral();
-//	h_exp_n->Scale(scale_exp);
+   cc_s->SetLogy(1);
+    Double_t scale_exp = norm/h_exp_n->Integral();
+	h_exp_n->Scale(scale_exp);
     h_exp_n ->Draw("HIST E1");
     //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_exp.png");
 
-//    Double_t scale_mc = norm/h_mc_n->Integral();
-//	h_mc_n->Scale(scale_mc);
+   Double_t scale_mc = norm/h_mc_n->Integral();
+	h_mc_n->Scale(scale_mc);
     h_mc_n ->Draw("HIST E1 same");
     //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
 

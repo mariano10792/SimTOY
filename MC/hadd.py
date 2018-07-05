@@ -8,8 +8,8 @@ command = ""
 for N in range(200,201):
 	for iDC in range(0,1):
 		DC=iDC*10
-		for A in [1]: 
-			for B in [50,75,100,125,150]: 
+		for A in [10000]: 
+			for B in [100]: 
 				command += "hadd output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+".root output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R=*.root && "
 command = command[:-2]     
 print command
