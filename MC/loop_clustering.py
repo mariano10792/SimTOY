@@ -7,9 +7,9 @@ command = ""
 for N in range(200,201):
 	for iDC in range(0,1):
 		DC=iDC*10
-		for A in [10000]: 
-			for B in [100]: 
-				for R in range(1,10):
+		for A in [25000,50000,750000,100000]: 
+			for B in [30,35,40,45,50]: 
+				for R in range(1,2): 
 					command += "./skExtract.exe -c extractConfig.xml MC_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".fits -o output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
 command = command[:-2]     
 print command

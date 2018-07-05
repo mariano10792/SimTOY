@@ -148,10 +148,10 @@ for (int j = 0; j < N0; ++j){
     TRandom3 rz(0); //  seed=0  ->  different numbers every time
     //h3->Fill(zz[j] = rz.Exp(tau));
 	zz[j] = rz.Exp(tau[j]);
-	if (zz[j]>250){
+	if (zz[j]>200){
 		continue;
 	}
-	cout << "zeta = "<< zz[j] << endl;
+	//cout << "zeta = "<< zz[j] << endl;
 
 	//cout << endl;
 	//cout << "x = "<< xx[j] << " , " << "y = "<< yy[j] << " , " << "z = "<< zz[j] << endl;
@@ -189,8 +189,8 @@ for (int j = 0; j < N0; ++j){
     // proportional to the square root of zz depth
     // AA y BB variables from Moroni 2015.
 
-    h5->Fill(sigma[j] = pow(A/100*log((B/100)*zz[j]+1),0.5));
-	cout << "sigma = "<< sigma[j] << endl;
+    h5->Fill(sigma[j] = pow(-A/100*log((-B/10000)*zz[j]+1),0.5));
+	//cout << "sigma = "<< sigma[j] << endl;
     // Reference:
     //sigma[j] = pow(-A*log(abs((B/10000)*zz[j]-1)),0.5);
 

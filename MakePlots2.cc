@@ -36,7 +36,7 @@ using namespace std;
 void MakePlots2(){
 
 int xmin=0;
-int xmax=15;
+int xmax=20;
 int nbins=(xmax-xmin+1)*2;
 
 
@@ -73,7 +73,7 @@ TTreeReaderValue<Int_t> xPix(myReader, "xPix");
 TTreeReaderValue<Int_t> yPix(myReader, "yPix");
 TTreeReaderValue<Float_t> ePix(myReader, "ePix");
 
-TFile *myFile2 = TFile::Open("./MC/output_N0=200_DC=0_A=1_B=125.root");
+TFile *myFile2 = TFile::Open("./MC/output_N0=200_DC=0_A=10000_B=100.root");
 TTreeReader myReader2("hitSumm", myFile2);
 
 TTreeReaderValue<Float_t> n2(myReader2, "n");
@@ -118,7 +118,7 @@ TTreeReaderValue<Float_t> ePix2(myReader2, "ePix");
     while (myReader2.Next()) {
        // Just access the data as if myPx and myPy were iterators (note the '*'
        // in front of them):
-       if (*e2>1350 && *e2<1650 && *ePix2>3 && *xBary2>10 && *xBary2<490 && *yBary2>5 && *yBary2<45){
+       if (*e2>1350 && *e2<1650 && *ePix2>3 && *xBary2>10 && *xBary2<245 && *yBary2>5 && *yBary2<45){
          h3->Fill(*n2);
        }
        // if (*e>4 && *ohdu==4){
