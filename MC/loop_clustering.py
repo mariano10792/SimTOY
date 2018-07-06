@@ -2,14 +2,14 @@
 # y para cada run R
 
 import os,sys
-
+#,,,,,,,,,5000]
 command = ""
 for N in range(200,201):
 	for iDC in range(0,1):
 		DC=iDC*10
-		for A in [25000,50000,750000,100000]: 
-			for B in [30,35,40,45,50]: 
-				for R in range(1,2): 
+		for A in [5000]: 
+			for B in [1,5,10,15,20,25,30]: 
+				for R in range(1,50): 
 					command += "./skExtract.exe -c extractConfig.xml MC_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".fits -o output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
 command = command[:-2]     
 print command
