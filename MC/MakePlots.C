@@ -83,6 +83,7 @@ void MakePlots(){
 
 // Monte Carlo Data ////////////////////////////////////////////////////
 
+
     TFile * f_mc = TFile::Open("output_N0=200_DC=0_A=2500_B=30.root");
         if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
     TTree * tmc    = (TTree*) f_mc->Get("hitSumm");
@@ -145,16 +146,19 @@ void MakePlots(){
 	h_exp_n -> SetMarkerStyle(22);              h_mc_n -> SetMarkerStyle(23);
 
     int norm=1; //Normalization
+    
+    		Double_t scale_mc = norm/h_mc_n->Integral();
+		h_mc_n->Scale(scale_mc);
+		h_mc_n ->Draw("HIST E1");
+    //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
+
+    
   // cc_s->SetLogy(1);
-   // Double_t scale_exp = norm/h_exp_n->Integral();
-	//h_exp_n->Scale(scale_exp);
-    h_exp_n ->Draw("HIST E1");
+    Double_t scale_exp = norm/h_exp_n->Integral();
+	h_exp_n->Scale(scale_exp);
+    h_exp_n ->Draw("HIST E1 same");
     //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_exp.png");
 
-   //Double_t scale_mc = norm/h_mc_n->Integral();
-	//h_mc_n->Scale(scale_mc);
-    //h_mc_n ->Draw("HIST E1 same");
-    //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
 
     //delete cc_s;
 
