@@ -32,7 +32,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range to the number of electrons per cluster
-  int emin = 1350; int emax = 1650;
+  int emin = 1350; int emax = 2000;
 
   int ohdu_numer = 4;
 
@@ -43,11 +43,11 @@ void Enable_and_Set_Branches(TTree* & tree);
   int Entries_mc = 1;
   int Entries_exp = 1;
   int xmin = 0; // range for histograms
-  int xmax =40; // range for histograms
+  int xmax =20; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = xmax+1;
+  int nbins = xmax*10+1;
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -64,8 +64,19 @@ void Enable_and_Set_Branches(TTree* & tree);
 
 using namespace std;
 
+
+	
+
 void MakePlots(){
 
+
+	float A=32.50;
+	float B=0.0020;
+	
+	int AA=A*100;
+	int BB=B*10000;
+
+	TString AB = "A="+std::to_string(A)+"\n \n B="+std::to_string(B)+"";
 // Get input files//////////////////////////////////////////////////////
 
 // Experimental Data ///////////////////////////////////////////////////
@@ -82,12 +93,14 @@ void MakePlots(){
 	Enable_and_Set_Branches(texp);
 
 // Monte Carlo Data ////////////////////////////////////////////////////
+	
 
+	TString s_mc = "output_N0=200_DC=0_A="+std::to_string(AA)+"_B="+std::to_string(BB)+".root";
 
-    TFile * f_mc = TFile::Open("output_N0=200_DC=0_A=2500_B=30.root");
+    TFile * f_mc = TFile::Open(s_mc);
         if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
     TTree * tmc    = (TTree*) f_mc->Get("hitSumm");
-    TH1D * h_mc_n      =  new TH1D("h_mc_n"        , "Distribucion de tamanio de clusters", nbins, xmin, xmax);
+    TH1D * h_mc_n      =  new TH1D("h_mc_n"        , "Distribucion de tamanio de clusters "+AB, nbins, xmin, xmax);
     h_mc_n -> Sumw2();
 
     int Entries_mc = tmc -> GetEntries();
@@ -103,17 +116,17 @@ void MakePlots(){
     texp->GetEntry(i_event);
 	if (ohdu == 4) {
 		if (e>emin && e<emax){  // Condition over the number of electrons
-			//if (xBary>10 && xBary<490){  // Condition over position
-				//if (yBary>5 && yBary<45){  // Condition over position
+			if (xBary>10 && xBary<490){  // Condition over position
+				if (yBary>5 && yBary<45){  // Condition over position
           if (ePix>0){  // Condition over DC
-           // if (xPix>250){  // Condition over CCD used area
+            if (xPix>250){  // Condition over CCD used area
                  // Fill the histogram with the variable n
-					h_exp_n -> Fill(n);
+					h_exp_n -> Fill(ePix);
           }
-				//}
+				}
 			}
-		//}
-	//}
+		}
+	}
 }
     }
 
@@ -121,14 +134,15 @@ void MakePlots(){
     for(int i_event=0;i_event<Entries_mc; i_event++){
 
     tmc->GetEntry(i_event);
+
 		if (e>emin && e<emax){  // Condition over the number of electrons
 			if (xBary>10 && xBary<245){  // Condition over position
 				if (yBary>5 && yBary<45){  // Condition over position
-          if (ePix>3){  // Condition over DC
+          if (ePix>0){  // Condition over DC
            
 
 					// Fill the histogram with the variable n
-					h_mc_n -> Fill(n);
+					h_mc_n -> Fill(ePix);
         
 				}
 			}
@@ -137,29 +151,34 @@ void MakePlots(){
   }
 
 // Plot histograms /////////////////////////////////////////////////////
-    TCanvas*  cc_s   = new TCanvas("cc_s","cc_s",1000,500);
+    TCanvas*  cc_s   = new TCanvas("cc_s","cc_s",700,500);
     cc_s->cd();
 
     h_exp_n -> SetLineColor(kRed +3);         h_mc_n -> SetLineColor(kBlue);
 	h_exp_n -> SetMarkerColor(kRed +3);       h_mc_n -> SetMarkerColor(kBlue);
 	h_exp_n -> SetMarkerSize(0.8);              h_mc_n -> SetMarkerSize(0.8);
 	h_exp_n -> SetMarkerStyle(22);              h_mc_n -> SetMarkerStyle(23);
-
+	
     int norm=1; //Normalization
-    
-    		Double_t scale_mc = norm/h_mc_n->Integral();
-		h_mc_n->Scale(scale_mc);
-		h_mc_n ->Draw("HIST E1");
-    //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
-
-    
-  // cc_s->SetLogy(1);
+  // cc_s->SetLogy(1); 
     Double_t scale_exp = norm/h_exp_n->Integral();
 	h_exp_n->Scale(scale_exp);
-    h_exp_n ->Draw("HIST E1 same");
-    //cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_exp.png");
+    h_exp_n ->Draw("HIST"); 
 
+    
 
+    	//cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
+
+        Double_t scale_mc = norm/h_mc_n->Integral();
+		h_mc_n->Scale(scale_mc);
+		h_mc_n ->Draw("HIST same");
+  
+  
+    cc_s->SaveAs( "./Dist_n_exp"+AB+".png");
+    
+  
+ 
+    
     //delete cc_s;
 
 }

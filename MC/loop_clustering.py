@@ -2,7 +2,7 @@
 # y para cada run R
 
 import os,sys
-#,,,,,,,,,5000]
+#
 command = ""
 for N in range(200,201):
 	for iDC in range(0,1):
