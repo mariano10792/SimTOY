@@ -6,10 +6,10 @@ import os,sys
 
 command = ""
 for N in range(200,201):
-	for iDC in range(0,1):
+	for iDC in range(1,10):
 		DC=iDC*10
-		for A in [2250,2750,3250,3500,3750,4000,4250,4500,4750,5000]: 
-			for B in [1,5,10,15,20,25,30]: 
+		for A in [3500]: 
+			for B in [10]: 
 				command += "hadd output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+".root output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R=*.root && "
 command = command[:-2]     
 print command

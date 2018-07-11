@@ -43,11 +43,11 @@ void Enable_and_Set_Branches(TTree* & tree);
   int Entries_mc = 1;
   int Entries_exp = 1;
   int xmin = 0; // range for histograms
-  int xmax =20; // range for histograms
+  int xmax =15; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = xmax*10+1;
+  int nbins = xmax*1+1;
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -70,8 +70,8 @@ using namespace std;
 void MakePlots(){
 
 
-	float A=32.50;
-	float B=0.0020;
+	float A=35.00;
+	float B=0.0010;
 	
 	int AA=A*100;
 	int BB=B*10000;
@@ -95,7 +95,7 @@ void MakePlots(){
 // Monte Carlo Data ////////////////////////////////////////////////////
 	
 
-	TString s_mc = "output_N0=200_DC=0_A="+std::to_string(AA)+"_B="+std::to_string(BB)+".root";
+	TString s_mc = "output_N0=200_DC=10_A="+std::to_string(AA)+"_B="+std::to_string(BB)+".root";
 
     TFile * f_mc = TFile::Open(s_mc);
         if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
@@ -121,7 +121,7 @@ void MakePlots(){
           if (ePix>0){  // Condition over DC
             if (xPix>250){  // Condition over CCD used area
                  // Fill the histogram with the variable n
-					h_exp_n -> Fill(ePix);
+					h_exp_n -> Fill(n);
           }
 				}
 			}
@@ -142,7 +142,7 @@ void MakePlots(){
            
 
 					// Fill the histogram with the variable n
-					h_mc_n -> Fill(ePix);
+					h_mc_n -> Fill(n);
         
 				}
 			}
@@ -161,17 +161,17 @@ void MakePlots(){
 	
     int norm=1; //Normalization
   // cc_s->SetLogy(1); 
-    Double_t scale_exp = norm/h_exp_n->Integral();
-	h_exp_n->Scale(scale_exp);
-    h_exp_n ->Draw("HIST"); 
-
+       Double_t scale_mc = norm/h_mc_n->Integral();
+		h_mc_n->Scale(scale_mc);
+		h_mc_n ->Draw("HIST ");
     
 
     	//cc_s->SaveAs( "/home/dario/CCD/toy/figures/Dist_n_MC.png");
+    Double_t scale_exp = norm/h_exp_n->Integral();
+	h_exp_n->Scale(scale_exp);
+    h_exp_n ->Draw("HIST same"); 
 
-        Double_t scale_mc = norm/h_mc_n->Integral();
-		h_mc_n->Scale(scale_mc);
-		h_mc_n ->Draw("HIST same");
+ 
   
   
     cc_s->SaveAs( "./Dist_n_exp"+AB+".png");

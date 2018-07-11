@@ -65,27 +65,31 @@ double alfa= kalfa.Uniform(0,1.92);
 // electrone que produce cada X. Se parecen solo porque la ganancia y
 // la energia de ionizacion son similares (3.7) y se cancelan mutuamente.
 
+
+
+double f = 3.6;
+
 if (alfa<0.51){
-	emeannumber[i]=5887.65; // [eV]
+	emeannumber[i]=5887.65/f; // [eV]
 	tau[i]=tau_Si;
 	//i++;
 	//cout<<alfa<<" A  \n ";
 }
 if (0.51<alfa && alfa<1.51){
-	emeannumber[i]=5898.75; // [eV]
+	emeannumber[i]=5898.75/f; // [eV]
 	tau[i]=tau_Si;
 	//i++;
 	//cout<<alfa<<" B  \n ";
 }
 if (1.51<alfa && alfa<1.715){
-	emeannumber[i]=6490.45; // [eV]
+	emeannumber[i]=6490.45/f; // [eV]
 	tau[i]=tau_Si*(6.5/5.9); // a first order correction with energy ...
 	//i++;
 	//cout<<alfa<<" C  \n ";
 }
 if (1.715<alfa && alfa<1.92){
 	//i++;
-	emeannumber[i]=6535.2; // [eV]
+	emeannumber[i]=6535.2/f; // [eV]
 	tau[i]=tau_Si*(6.5/5.9); // a first order correction with energy ...
 	//cout<<alfa<<" D  \n ";
 }
@@ -308,6 +312,13 @@ for (int i = 0; i < nx; ++i) {
 		   //cout<<"bin: "<<i*nx+j<<" Interac + DC: "<<pix_total[i*nx+j]<<endl;
 		   //cout<<endl;
 		}
+		
+				for (int j = 0; j < ny; ++j) {
+
+		   pix_int[j*nx+i]= pix_int[j*nx+i]*3.21401;
+		   pix_dc[j*nx+i]= pix_dc[j*nx+i]*3.21401;
+		   pix_total[j*nx+i]= pix_total[j*nx+i]*3.21401;
+		 }
 }
 }
 
