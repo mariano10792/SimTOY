@@ -44,8 +44,8 @@ void Enable_and_Set_Branches(TTree* & tree);
 
   int Entries_mc = 1;
   int Entries_exp = 1;
-  int xmin = 1300; // range for histograms
-  int xmax =1700; // range for histograms
+  int xmin = 0; // range for histograms
+  int xmax =10; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
   
@@ -115,21 +115,28 @@ cout<<"min ePix"<< minePix<<endl;
 										break;
 									}
 								}
-
+								bool noBadTransferInCluster = true;
+								for (int p = 0; p < nSavedPix; ++p){
+									if(xPix[p]==305){
+									noBadTransferInCluster = false;
+									break;
+								}
+							}
+							
 								if (noLowPixInCluster){
-									//if (xBary>10 & xBary<490){  
-										//if (yBary>5 & yBary<45){  
+									if (xBary>10 & xBary<490){  
+										if (yBary>5 & yBary<45){  
 											// Fill the histogram with the variable n
-											//h_exp_n -> Fill(n); 
+											h_exp_n -> Fill(n); 
 										
 										
 										
 											//Fill the histogram with the variable ePix
-											for (int p = 0; p < nSavedPix; ++p){
-											h_exp_n -> Fill(ePix[p]); 
+											//for (int p = 0; p < nSavedPix; ++p){
+											//h_exp_n -> Fill(ePix[p]); 
+											
 										}
-										//}
-									//}
+									}
 								}
 							}	
 						}
@@ -180,22 +187,33 @@ cout<<"min ePix"<< minePix<<endl;
 									break;
 								}
 							}
+							bool noBadTransferInCluster = true;
+							for (int p = 0; p < nSavedPix; ++p){
+								if(xPix[p]==305){
+									noBadTransferInCluster = false;
+									break;
+								}
+							}
+							
 							if (noLowPixInCluster){
-								//if (xBary>10 & xBary<490){  
-									//if (yBary>5 & yBary<45){  
+								if (noBadTransferInCluster){
+								if (xBary>10 & xBary<490){  
+									if (yBary>5 & yBary<45){ 
+										 
 										// Fill the histogram with the variable n
-											//h_mc_n -> Fill(n); 
-																				
+											h_mc_n -> Fill(n); 
+																															
 										// Fill the histogram with the variable ePix
-											for (int p = 0; p < nSavedPix; ++p){
-											h_mc_n -> Fill(ePix[p]); 
+											//for (int p = 0; p < nSavedPix; ++p){
+											//h_mc_n -> Fill(ePix[p]); 
 										}
-									//}
-								//}
+									}
+								}
 							}
 
 						}	
 					}
+					
 					
 					
 						
@@ -217,17 +235,17 @@ cout<<"min ePix"<< minePix<<endl;
 					h_exp_n -> SetMarkerStyle(24);            
 					h_mc_n -> SetMarkerStyle(24);
 					
-					int norm=1; //Normalization    
+					//int norm=1; //Normalization    
 					//clusters->SetLogy(1);
-					Double_t scale_exp = norm/h_exp_n->Integral();
-					h_exp_n->Scale(scale_exp);
-					h_exp_n->SetMaximum(0.5);
+					//Double_t scale_exp = norm/h_exp_n->Integral();
+					//h_exp_n->Scale(scale_exp);
+					//h_exp_n->SetMaximum(0.5);
 					h_exp_n ->Draw("HIST E1");
 					//clusters->SaveAs( "./figures/Dist_n_exp.png"); 
 					
-					Double_t scale_mc = norm/h_mc_n->Integral();
-					h_mc_n->Scale(scale_mc);
-					h_mc_n->SetMaximum(0.5);
+					//Double_t scale_mc = norm/h_mc_n->Integral();
+					//h_mc_n->Scale(scale_mc);
+					//h_mc_n->SetMaximum(0.5);
 					h_mc_n ->Draw("HIST E1 same");
 					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".png").c_str()); 
 					
