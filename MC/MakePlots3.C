@@ -38,7 +38,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int ohdu_numer = 4;
 //number of bins to take into account for chi2  
   int   bines = 7; 
-  float minePix = 1.5; // will be clasified as 1e-
+  float minePix = 0; // will be clasified as 1e-
     
   ////////////////////////////////////////////////////////////////////////
 
@@ -124,8 +124,8 @@ cout<<"min ePix"<< minePix<<endl;
 							}
 							
 								if (noLowPixInCluster){
-									if (xBary>10 & xBary<490){  
-										if (yBary>5 & yBary<45){  
+									if (xBary>10 && xBary<490){  
+										if (yBary>5 && yBary<45){  
 											// Fill the histogram with the variable n
 											h_exp_n -> Fill(n); 
 										
@@ -151,7 +151,7 @@ cout<<"min ePix"<< minePix<<endl;
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
 				int N=200;
-				int DC=90;
+				int DC=60;
 				int A=3500;
 				int B=10;
 							
@@ -197,8 +197,8 @@ cout<<"min ePix"<< minePix<<endl;
 							
 							if (noLowPixInCluster){
 								if (noBadTransferInCluster){
-								if (xBary>10 & xBary<490){  
-									if (yBary>5 & yBary<45){ 
+								if (xBary>10 && xBary<490){  
+									if (yBary>5 && yBary<45){ 
 										 
 										// Fill the histogram with the variable n
 											h_mc_n -> Fill(n); 
