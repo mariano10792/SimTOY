@@ -34,18 +34,18 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =1300 ; int emax = 1700;  
+  int emin =0 ; int emax = 2000;  
   int ohdu_numer = 4;
 //number of bins to take into account for chi2  
   int   bines = 7; 
-  float minePix = 0; // will be clasified as 1e-
+  float minePix = 1.5; // will be clasified as 1e-
     
   ////////////////////////////////////////////////////////////////////////
 
   int Entries_mc = 1;
   int Entries_exp = 1;
   int xmin = 0; // range for histograms
-  int xmax =10; // range for histograms
+  int xmax =2000; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
   
@@ -134,7 +134,7 @@ cout<<"min ePix"<< minePix<<endl;
 											//Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
 											//h_exp_n -> Fill(ePix[p]); 
-											
+											//}
 										}
 									}
 								}
@@ -151,7 +151,7 @@ cout<<"min ePix"<< minePix<<endl;
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
 				int N=200;
-				int DC=60;
+				int DC=0;
 				int A=3500;
 				int B=10;
 							
@@ -203,9 +203,10 @@ cout<<"min ePix"<< minePix<<endl;
 										// Fill the histogram with the variable n
 											h_mc_n -> Fill(n); 
 																															
-										// Fill the histogram with the variable ePix
+									//	 Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
 											//h_mc_n -> Fill(ePix[p]); 
+											//}
 										}
 									}
 								}
