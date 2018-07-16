@@ -27,46 +27,46 @@
 #include "TTree.h"
 #include "TObjString.h"
 #include "TH2D.h"
-using namespace std; 
+using namespace std;
 
 void Enable_and_Set_Branches(TTree* & tree);
 
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =0 ; int emax = 2000;  
+  int emin =1400 ; int emax = 1500;
   int ohdu_numer = 4;
-//number of bins to take into account for chi2  
-  int   bines = 7; 
+//number of bins to take into account for chi2
+  int   bines = 7;
   float minePix = 1.5; // will be clasified as 1e-
-    
+
   ////////////////////////////////////////////////////////////////////////
 
   int Entries_mc = 1;
   int Entries_exp = 1;
   int xmin = 0; // range for histograms
-  int xmax =2000; // range for histograms
+  int xmax =10; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
-  
+
   int nbins = xmax*1+1;
 
   const int maxClusterSize = 50000;
-   
+
 ////////////////////////////////////////////////////////////////////////
 
-  int runID; int ohdu; int expoStart; 
-  int nSat; int flag; 
+  int runID; int ohdu; int expoStart;
+  int nSat; int flag;
   int xMin; int xMax;
   int yMin; int yMax;
   Float_t e; Float_t n;
   Float_t xBary; Float_t yBary;
   Float_t xVar; Float_t yVar;
   int  nSavedPix;
-  int xPix[maxClusterSize]; 
+  int xPix[maxClusterSize];
   int yPix[maxClusterSize];
   Float_t ePix[maxClusterSize];
-    
+
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////
@@ -80,8 +80,8 @@ string itos(const int i){
 
 
 
-void MakePlots3(){  
-     
+void MakePlots3(){
+
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
 
@@ -95,15 +95,15 @@ cout<<"min ePix"<< minePix<<endl;
 
 					int Entries_exp = texp -> GetEntries();
 					cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
-					
-					Enable_and_Set_Branches(texp); 
+
+					Enable_and_Set_Branches(texp);
 
 				// Get information from trees///////////////////////////////////////////
 
 					for(int i_event=0;i_event<Entries_exp; i_event++){
-				   
+
 					texp->GetEntry(i_event);
-					
+
 						if (ohdu == ohdu_numer) {
 							if (e>emin && e<emax){  // number of electrons
 
@@ -122,59 +122,59 @@ cout<<"min ePix"<< minePix<<endl;
 									break;
 								}
 							}
-							
+
 								if (noLowPixInCluster){
-									if (xBary>10 && xBary<490){  
-										if (yBary>5 && yBary<45){  
+									if (xBary>10 && xBary<490){
+										if (yBary>5 && yBary<45){
 											// Fill the histogram with the variable n
-											h_exp_n -> Fill(n); 
-										
-										
-										
+											h_exp_n -> Fill(n);
+
+
+
 											//Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
-											//h_exp_n -> Fill(ePix[p]); 
+											//h_exp_n -> Fill(ePix[p]);
 											//}
 										}
 									}
 								}
-							}	
+							}
 						}
-					}									
-					
+					}
+
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
 	//for(int N=1000;N<1001; N++){
-		//for(int DC=1000;DC<1001; DC=DC++){ 
+		//for(int DC=1000;DC<1001; DC=DC++){
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
 				int N=200;
 				int DC=0;
 				int A=3500;
 				int B=10;
-							
-				// Monte Carlo Data ////////////////////////////////////////////////////
-				// Get input files//////////////////////////////////////////////////////	
 
-					
+				// Monte Carlo Data ////////////////////////////////////////////////////
+				// Get input files//////////////////////////////////////////////////////
+
+
 					TFile * f_mc = TFile::Open(("output_N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".root").c_str());
-					
-					if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}   
+
+					if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
 					TTree * tmc    = (TTree*) f_mc->Get("hitSumm");
 					TH1D * h_mc_n      =  new TH1D("h_mc_n", ("Distribucion de tamanio de clusters -- N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(), nbins, xmin, xmax);
 					h_mc_n -> Sumw2();
-					
+
 					int Entries_mc = tmc -> GetEntries();
 					cout<<"Entries in MC file: "<<Entries_mc<<endl;
 
 					Enable_and_Set_Branches(tmc);
-					
-				// Get information from trees///////////////////////////////////////////        
-					
+
+				// Get information from trees///////////////////////////////////////////
+
 					for(int i_event=0;i_event<Entries_mc; i_event++){
-					
+
 					tmc->GetEntry(i_event);
 
 						if (e>emin && e<emax){  // number of electrons
@@ -194,87 +194,87 @@ cout<<"min ePix"<< minePix<<endl;
 									break;
 								}
 							}
-							
+
 							if (noLowPixInCluster){
 								if (noBadTransferInCluster){
-								if (xBary>10 && xBary<490){  
-									if (yBary>5 && yBary<45){ 
-										 
+								if (xBary>10 && xBary<490){
+									if (yBary>5 && yBary<45){
+
 										// Fill the histogram with the variable n
-											h_mc_n -> Fill(n); 
-																															
+											h_mc_n -> Fill(n);
+
 									//	 Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
-											//h_mc_n -> Fill(ePix[p]); 
+											//h_mc_n -> Fill(ePix[p]);
 											//}
 										}
 									}
 								}
 							}
 
-						}	
+						}
 					}
-					
-					
-					
-						
+
+
+
+
 				// Plot histograms /////////////////////////////////////////////////////
 					TCanvas*  clusters   = new TCanvas("clusters","clusters",1000,500);
 					clusters->cd();
 					gStyle->SetOptStat(0);
 					//gPad->DrawFrame(0.5,0.85,3.5,1.1,"Summary of fit results;;Fit Bias");
-					   
-					h_exp_n -> SetLineColor(kRed +3);         
+
+					h_exp_n -> SetLineColor(kRed +3);
 					h_mc_n -> SetLineColor(kBlue);
-					
-					h_exp_n -> SetMarkerColor(kRed +3);       
+
+					h_exp_n -> SetMarkerColor(kRed +3);
 					h_mc_n -> SetMarkerColor(kBlue);
-					
-					h_exp_n -> SetMarkerSize(1.0);            
+
+					h_exp_n -> SetMarkerSize(1.0);
 					h_mc_n -> SetMarkerSize(1.0);
-					
-					h_exp_n -> SetMarkerStyle(24);            
+
+					h_exp_n -> SetMarkerStyle(24);
 					h_mc_n -> SetMarkerStyle(24);
-					
-					//int norm=1; //Normalization    
+
+					//int norm=1; //Normalization
 					//clusters->SetLogy(1);
 					//Double_t scale_exp = norm/h_exp_n->Integral();
 					//h_exp_n->Scale(scale_exp);
 					//h_exp_n->SetMaximum(0.5);
 					h_exp_n ->Draw("HIST E1");
-					//clusters->SaveAs( "./figures/Dist_n_exp.png"); 
-					
+					//clusters->SaveAs( "./figures/Dist_n_exp.png");
+
 					//Double_t scale_mc = norm/h_mc_n->Integral();
 					//h_mc_n->Scale(scale_mc);
 					//h_mc_n->SetMaximum(0.5);
 					h_mc_n ->Draw("HIST E1 same");
-					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".png").c_str()); 
-					
-					vector<double> EXP(bines); 
-					vector<double> EXP_error(bines); 
-					
+					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".png").c_str());
+
+					vector<double> EXP(bines);
+					vector<double> EXP_error(bines);
+
 					for(int i_bin=1;i_bin<bines; i_bin++){
 						EXP[i_bin]= (h_exp_n->GetBinContent(i_bin));
 						EXP_error[i_bin] = h_exp_n->GetBinError(i_bin);
 						cout<<EXP[i_bin]<<" "<<EXP_error[i_bin]<<endl;
 					}
-					
-					vector<double> MC(bines); 
-					vector<double> MC_error(bines); 
-					
+
+					vector<double> MC(bines);
+					vector<double> MC_error(bines);
+
 					for(int i_bin=1;i_bin<bines; i_bin++){
 						MC[i_bin]= h_mc_n->GetBinContent(i_bin);
 						MC_error[i_bin] = h_mc_n->GetBinError(i_bin);
 						cout<<MC[i_bin]<<" "<<MC_error[i_bin]<<endl;
 					}
-					
+
 					Double_t chi2=0;
 					for(int i_bin=1;i_bin<bines; i_bin++){
 						chi2=pow((EXP[i_bin]-MC[i_bin]),2)/MC_error[i_bin];
 					}
 						cout<<endl;
 						cout<<"Chi2: "<<chi2<<endl;
-						
+
 					TLegend *lg = new TLegend(0.6,0.6,0.9,0.8,NULL,"brNDC");
 					lg->SetBorderSize(1);
 					lg->SetTextFont(62);
@@ -284,19 +284,19 @@ cout<<"min ePix"<< minePix<<endl;
 					lg->AddEntry(h_exp_n,("Datos -             Chi2: "+itos(chi2)).c_str(),"l");
 					lg->AddEntry(h_mc_n,("MC N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(),"l");
 					//lg->AddEntry(chi2,"Chi cuadrado","l");
-					lg->Draw("same");		
-					
+					lg->Draw("same");
+
 					gPad->Update();
 					//getchar();
 					if (chi2 < 50) {
 						//gPad->WaitPrimitive();
 					}
-					
-					
+
+
 				//}
 			//}
 		//}
-	//}  
+	//}
 }
 
 ////////////////////////////////////////////////////////////////////////
