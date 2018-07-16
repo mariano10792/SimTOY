@@ -4,17 +4,17 @@
 import os,sys
 #,
 command = ""
-for N in range(200,201):
+for N in range(1,2):
 	for iDC in range(1,10):
-		DC=iDC*10
+		DC=iDC*100
 		for A in [3500]: 
 			for B in [10]: 
-				for R in range(2,50):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
+				for R in range(1,100):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
 					#command += "rm MC_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".fits"+" && "
 					#	para los pdf
-					command += "rm CCD_N0"+str(N)+"DC"+str(DC)+"A"+str(A)+".000000B"+str(B)+".000000R"+str(R)+".pdf"+" && "
+					#command += "rm CCD_N0"+str(N)+"DC"+str(DC)+"A"+str(A)+".000000B"+str(B)+".000000R"+str(R)+".pdf"+" && "
 					# para los root
-					#command += "rm output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
+					command += "rm output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
 					
 					
 command = command[:-2]     

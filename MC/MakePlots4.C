@@ -38,7 +38,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int bines = 7;
-  float minePix = 1.5; // will be clasified as 1e-
+  float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -144,7 +144,7 @@ cout<<"min ePix: "<< minePix<<endl;
       								if (xBary>10 && xBary<490){
       									if (yBary>5 && yBary<45){
 
-                  cout << "i= "<< i << endl;
+                 // cout << "i= "<< i << endl;
                   h_exp_e[ene]->Fill(e);
 
 									sigma_exp[ene]= h_exp_e[ene]->GetRMS();

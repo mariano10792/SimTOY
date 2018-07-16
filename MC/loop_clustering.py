@@ -4,12 +4,12 @@
 import os,sys
 #
 command = ""
-for N in range(200,201):
+for N in range(1,2):
 	for iDC in range(1,10):
-		DC=iDC*10
+		DC=iDC*100
 		for A in [3500]: 
 			for B in [10]: 
-				for R in range(1,50):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
+				for R in range(1,100):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
 					command += "./skExtract.exe -c extractConfig.xml MC_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".fits -o output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R="+str(R)+".root"+" && "
 command = command[:-2]     
 print command

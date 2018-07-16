@@ -34,11 +34,11 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =1400 ; int emax = 1500;
+  int emin =0 ; int emax = 220;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
-  float minePix = 1.5; // will be clasified as 1e-
+  float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -126,6 +126,7 @@ cout<<"min ePix"<< minePix<<endl;
 								if (noLowPixInCluster){
 									if (xBary>10 && xBary<490){
 										if (yBary>5 && yBary<45){
+											if (xPix[0]>250){
 											// Fill the histogram with the variable n
 											h_exp_n -> Fill(n);
 
@@ -135,6 +136,7 @@ cout<<"min ePix"<< minePix<<endl;
 											//for (int p = 0; p < nSavedPix; ++p){
 											//h_exp_n -> Fill(ePix[p]);
 											//}
+											}
 										}
 									}
 								}
@@ -150,8 +152,8 @@ cout<<"min ePix"<< minePix<<endl;
 		//for(int DC=1000;DC<1001; DC=DC++){
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
-				int N=200;
-				int DC=0;
+				int N=1;
+				int DC=800;
 				int A=3500;
 				int B=10;
 
@@ -187,31 +189,18 @@ cout<<"min ePix"<< minePix<<endl;
 									break;
 								}
 							}
-							bool noBadTransferInCluster = true;
-							for (int p = 0; p < nSavedPix; ++p){
-								if(xPix[p]==305){
-									noBadTransferInCluster = false;
-									break;
-								}
-							}
 
 							if (noLowPixInCluster){
-								if (noBadTransferInCluster){
-								if (xBary>10 && xBary<490){
-									if (yBary>5 && yBary<45){
+
 
 										// Fill the histogram with the variable n
 											h_mc_n -> Fill(n);
 
-									//	 Fill the histogram with the variable ePix
+								    	// Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
 											//h_mc_n -> Fill(ePix[p]);
 											//}
-										}
-									}
-								}
 							}
-
 						}
 					}
 
@@ -236,17 +225,17 @@ cout<<"min ePix"<< minePix<<endl;
 					h_exp_n -> SetMarkerStyle(24);
 					h_mc_n -> SetMarkerStyle(24);
 
-					//int norm=1; //Normalization
-					//clusters->SetLogy(1);
-					//Double_t scale_exp = norm/h_exp_n->Integral();
-					//h_exp_n->Scale(scale_exp);
-					//h_exp_n->SetMaximum(0.5);
+					int norm=1; //Normalization
+					clusters->SetLogy(1);
+					Double_t scale_exp = norm/h_exp_n->Integral();
+					h_exp_n->Scale(scale_exp);
+					h_exp_n->SetMaximum(1);
 					h_exp_n ->Draw("HIST E1");
 					//clusters->SaveAs( "./figures/Dist_n_exp.png");
 
-					//Double_t scale_mc = norm/h_mc_n->Integral();
-					//h_mc_n->Scale(scale_mc);
-					//h_mc_n->SetMaximum(0.5);
+					Double_t scale_mc = norm/h_mc_n->Integral();
+					h_mc_n->Scale(scale_mc);
+					h_mc_n->SetMaximum(1);
 					h_mc_n ->Draw("HIST E1 same");
 					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".png").c_str());
 
