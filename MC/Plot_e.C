@@ -34,11 +34,11 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =0 ; int emax = 5;
+  int emin =1400 ; int emax = 1640;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
-  float minePix = 0; // will be clasified as 1e-
+  float minePix = 1640; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -46,8 +46,8 @@ void Enable_and_Set_Branches(TTree* & tree);
 
   int Entries_mc = 1;
   int Entries_exp = 1;
-  int xmin = 0; // range for histograms
-  int xmax =10; // range for histograms
+  int xmin = 1400; // range for histograms
+  int xmax =1640; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
@@ -68,6 +68,8 @@ void Enable_and_Set_Branches(TTree* & tree);
   int xPix[maxClusterSize];
   int yPix[maxClusterSize];
   Float_t ePix[maxClusterSize];
+  int J=0;
+  
 
 using namespace std;
 
@@ -82,7 +84,7 @@ string itos(const int i){
 
 
 
-void MakePlots3(){
+void Plot_e(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
@@ -101,7 +103,7 @@ cout<<"min ePix"<< minePix<<endl;
 					Enable_and_Set_Branches(texp);
 
 				// Get information from trees///////////////////////////////////////////
-
+					
 					for(int i_event=0;i_event<Entries_exp; i_event++){
 
 					texp->GetEntry(i_event);
@@ -110,10 +112,10 @@ cout<<"min ePix"<< minePix<<endl;
 							if (e>emin && e<emax){  // number of electrons
 
 								// Check if one of the pixels in the cluster is smaller that minePix
-								bool noLowPixInCluster = true;
+								bool LowPixInCluster = false;
 								for (int p = 0; p < nSavedPix; ++p){
 									if(ePix[p]<minePix){
-										noLowPixInCluster = false;
+										LowPixInCluster = true;
 										break;
 									}
 								}
@@ -125,14 +127,14 @@ cout<<"min ePix"<< minePix<<endl;
 								}
 							}
 
-								if (noLowPixInCluster){
+								if (LowPixInCluster){
 									if (noBadTransferInCluster){
 									if (xBary>10 && xBary<490){
 										if (yBary>5 && yBary<45){
 											if (xPix[0]>250){
 											// Fill the histogram with the variable n
-											h_exp_n -> Fill(n);
-
+											h_exp_n -> Fill(e);
+											J++;
 
 
 											//Fill the histogram with the variable ePix
@@ -147,6 +149,7 @@ cout<<"min ePix"<< minePix<<endl;
 						}
 					}
 				}
+
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -194,10 +197,11 @@ cout<<"min ePix"<< minePix<<endl;
 							}
 
 							if (noLowPixInCluster){
-
+									
 
 										// Fill the histogram with the variable n
-											h_mc_n -> Fill(n);
+											h_exp_n -> Fill(e);
+					
 
 								    	// Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
@@ -229,10 +233,10 @@ cout<<"min ePix"<< minePix<<endl;
 					h_mc_n -> SetMarkerStyle(24);
 
 					//int norm=1; //Normalization
-					clusters->SetLogy(1);
+					//clusters->SetLogy(1);
 					//Double_t scale_exp = norm/h_exp_n->Integral();
 					//h_exp_n->Scale(scale_exp);
-					h_exp_n->SetMaximum(58000);
+					h_exp_n->SetMaximum(300);
 					h_exp_n ->Draw("HIST E1");
 					//clusters->SaveAs( "./figures/Dist_n_exp.png");
 
@@ -265,6 +269,8 @@ cout<<"min ePix"<< minePix<<endl;
 					}
 						cout<<endl;
 						cout<<"Chi2: "<<chi2<<endl;
+						
+						cout<<"Nro de eventos: "<<J<<endl;
 
 					TLegend *lg = new TLegend(0.35,0.7,0.9,0.9,NULL,"brNDC");
 					lg->SetBorderSize(1);

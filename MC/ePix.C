@@ -34,7 +34,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =0 ; int emax = 5;
+  int emin =1400 ; int emax = 1640;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
@@ -47,7 +47,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int Entries_mc = 1;
   int Entries_exp = 1;
   int xmin = 0; // range for histograms
-  int xmax =10; // range for histograms
+  int xmax =2000; // range for histograms
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
@@ -82,7 +82,7 @@ string itos(const int i){
 
 
 
-void MakePlots3(){
+void ePix(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
@@ -110,10 +110,10 @@ cout<<"min ePix"<< minePix<<endl;
 							if (e>emin && e<emax){  // number of electrons
 
 								// Check if one of the pixels in the cluster is smaller that minePix
-								bool noLowPixInCluster = true;
+								bool LowPixInCluster = false;
 								for (int p = 0; p < nSavedPix; ++p){
 									if(ePix[p]<minePix){
-										noLowPixInCluster = false;
+										LowPixInCluster = true;
 										break;
 									}
 								}
@@ -125,13 +125,12 @@ cout<<"min ePix"<< minePix<<endl;
 								}
 							}
 
-								if (noLowPixInCluster){
-									if (noBadTransferInCluster){
+								if (LowPixInCluster){
 									if (xBary>10 && xBary<490){
 										if (yBary>5 && yBary<45){
 											if (xPix[0]>250){
 											// Fill the histogram with the variable n
-											h_exp_n -> Fill(n);
+											h_exp_n -> Fill(e);
 
 
 
@@ -146,7 +145,7 @@ cout<<"min ePix"<< minePix<<endl;
 							}
 						}
 					}
-				}
+
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
