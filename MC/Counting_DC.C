@@ -80,18 +80,12 @@ string itos(const int i){
 
 
 
-void MakePlots4(){
+void Counting_DC(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
 
-cout<<"min ePix: "<< minePix<<endl;
-
-					TFile * f_exp = TFile::Open("55Fe_exp.root");
-					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
-					TTree * texp = (TTree*) f_exp->Get("hitSumm");
-
-          TH1D * h_exp_e[nbins+1];
+					TH1D * h_exp_e[267];
 					TString histname_tmp_exp;
 
 					for(int ystarbin=0;ystarbin<nbins+1;++ystarbin){
@@ -101,76 +95,70 @@ cout<<"min ePix: "<< minePix<<endl;
 					h_exp_e[ystarbin]->Sumw2();
 					}
 
-					int Entries_exp = texp -> GetEntries();
-					cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
-
-					Enable_and_Set_Branches(texp);
+					
 
 				// Get information from trees///////////////////////////////////////////
 
-				vector<double> events_exp(50000);
-				vector<double> mean_exp(nbins+1);
-				vector<double> sigma_exp(nbins+1);
-				vector<double> fano_exp(nbins+1);
+				//vector<double> events_exp(50000);
+				//vector<double> mean_exp(nbins+1);
+				//vector<double> sigma_exp(nbins+1);
+				//vector<double> fano_exp(nbins+1);
+				int initfile = 73;
+				int nfiles= 267;
+				vector<double> ENE(nfiles-initfile); //194 espacios
+				vector<double> I(nfiles-initfile); //194 espacios
+				
+		for(int ene=initfile; ene<nfiles; ene++){
+					
+					TFile * f_exp = TFile::Open(("../../caca/output_"+itos(ene)+".root").c_str());
+					if ((!f_exp) || (f_exp->IsZombie())) { //deletes file if it doesnt find it
+					    std::cout << "(no file || file is zombie) skip file: "
+					              << f_exp << std::endl;
+									ENE[ene-initfile]=ene;
+									I[ene-initfile]=0;
+					    delete f_exp; continue;
+					  }
+					
+					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
+					TTree * texp = (TTree*) f_exp->Get("hitSumm");
 
 
-				for (int ene=1; ene<nbins+1; ene++){
-          int i = 0;
+
+					int Entries_exp = texp -> GetEntries();
+					cout<<"Entries in experimental data file "<< ene <<" are "<<Entries_exp<<endl;
+
+					Enable_and_Set_Branches(texp);
+					int i = 0;
 					for(int i_event=0;i_event<Entries_exp; i_event++){
 					texp->GetEntry(i_event);
 
 							if (ohdu == ohdu_numer) {
-								if (e>emin && e<emax){  // number of electrons
-                  if (n==ene){
+								
+							
 
-                    // Check if one of the pixels in the cluster is smaller that minePix
-      							bool noLowPixInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(ePix[p]<minePix){
-      									noLowPixInCluster = false;
-      									break;
-      								}
-      							}
-      							bool noBadTransferInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(xPix[p]==305){
-      									noBadTransferInCluster = false;
-      									break;
-      								}
-      							}
-
-      							if (noLowPixInCluster){
-      								if (noBadTransferInCluster){
-      								if (xBary>10 && xBary<490){
-      									if (yBary>5 && yBary<45){
-
-                 // cout << "i= "<< i << endl;
-                  h_exp_e[ene]->Fill(e);
-
-									sigma_exp[ene]= h_exp_e[ene]->GetRMS();
-									mean_exp[ene]= h_exp_e[ene]->GetMean();
-									fano_exp[ene]= pow(sigma_exp[ene],2)/mean_exp[ene];
-
-									events_exp[i]=e;
-									i++;
-                          }
-                        }
-                      }
-                    }
+      							
+      						for (int p = 0; p < nSavedPix; ++p){
+									if (xPix[0]<250){
+										if(ePix[p]<8 *minePix){
+      									i++;
 									}
 								}
 							}
-						}
-						// aca calculamos varianza y media
+						
+				
 
-            h_exp_e[ene]->Draw("hist");
 
-						gPad->Update();
-						//getchar();
+                 // cout << "i= "<< i << endl;
 
-						gPad->WaitPrimitive();
+		                      
+						    }
+						  }
+						 cout<<"DC in experimental data file "<< ene <<" are "<<i<<endl;
+						 ENE[ene-initfile]=ene;
+						 I[ene-initfile]=i;
+						 					  
+					    }
 
-					}
 
 					////matrix with charges
 					//int **N1 = new int*[1];  int **N2 = new int*[2]; int **N3 = new int*[3]; int **N4 = new int*[4]; int **N5 = new int*[5]; int **N6 = new int*[6]; int **N7 = new int*[7];
@@ -227,7 +215,7 @@ cout<<"min ePix: "<< minePix<<endl;
           int i = 0;
 					for(int i_event=0;i_event<Entries_mc; i_event++){
 
-					texp->GetEntry(i_event);
+					//texp->GetEntry(i_event);
 
 
 
@@ -258,16 +246,6 @@ cout<<"min ePix: "<< minePix<<endl;
 
 
 					}
-
-				for (int g=1; g<nbins+1; g++){
-					cout << "n = " << g << " mean_exp " << mean_exp[g] << endl;
-					//cout << "n = " << g << " mean " << mean_mc[g] << endl;
-					cout << "n = " << g <<  " sigma_exp " << sigma_exp[g] << endl;
-					//cout << "n = " << g <<  " sigma " << sigma_mc[g] << endl;
-					cout << "n = " << g <<  " fano_exp " << fano_exp[g] << endl << endl;
-
-
-				}
 
 
 					/*
@@ -346,6 +324,17 @@ cout<<"min ePix: "<< minePix<<endl;
 			//}
 		//}
 	//}
+	
+	
+	
+	/////////////
+	// save file
+	///////////
+	ofstream myfile("./report_8e.txt");
+	for(int ene=initfile; ene<nfiles; ene++){
+	myfile << ENE[ene-initfile] <<"	"<< I[ene-initfile] <<"\n" ;
+	
+}	
 }
 
 ////////////////////////////////////////////////////////////////////////
