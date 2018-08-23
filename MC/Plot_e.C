@@ -34,11 +34,11 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =1400 ; int emax = 1640;
+  int emin =0 ; int emax = 1640;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
-  float minePix = 1640; // will be clasified as 1e-
+  float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -69,6 +69,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int yPix[maxClusterSize];
   Float_t ePix[maxClusterSize];
   int J=0;
+  int I=0;
   
 
 using namespace std;
@@ -89,7 +90,7 @@ void Plot_e(){
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
 
-cout<<"min ePix"<< minePix<<endl;
+cout<<"min ePix = "<< minePix<<endl;
 
 					TFile * f_exp = TFile::Open("55Fe_exp.root");
 					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
@@ -149,6 +150,7 @@ cout<<"min ePix"<< minePix<<endl;
 						}
 					}
 				}
+				cout<<"J = "<<J<<endl;
 
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -158,9 +160,9 @@ cout<<"min ePix"<< minePix<<endl;
 		//for(int DC=1000;DC<1001; DC=DC++){
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
-				int N=1;
-				int DC=540;
-				int A=3500;
+				int N=100;
+				int DC=543;
+				int A=4000;
 				int B=10;
 
 				// Monte Carlo Data ////////////////////////////////////////////////////
@@ -200,8 +202,8 @@ cout<<"min ePix"<< minePix<<endl;
 									
 
 										// Fill the histogram with the variable n
-											h_exp_n -> Fill(e);
-					
+											h_mc_n -> Fill(e);
+											I++;
 
 								    	// Fill the histogram with the variable ePix
 											//for (int p = 0; p < nSavedPix; ++p){
@@ -210,6 +212,7 @@ cout<<"min ePix"<< minePix<<endl;
 							}
 						}
 					}
+					cout<<"I = "<<I<<endl;
 
 
 

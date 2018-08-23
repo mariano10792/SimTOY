@@ -1,4 +1,4 @@
-FITSIOROOT = /home/babieca/MEGA/MEGAsync/CCD/Datos_Fe55/cfitsio/
+FITSIOROOT = /home/mariano/MEGAsync/CCD/Datos_Fe55/cfitsio/
 CFITSIO = $(FITSIOROOT)
 CPP = g++
 CC = gcc

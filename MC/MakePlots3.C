@@ -34,7 +34,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =0 ; int emax = 5;
+  int emin =1400 ; int emax = 1640;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
@@ -155,10 +155,10 @@ cout<<"min ePix"<< minePix<<endl;
 		//for(int DC=1000;DC<1001; DC=DC++){
 			//for(int A=2500;A<2501; A=A++){
 				//for(int B=30;B<31; B=B++){
-				int N=1;
-				int DC=540;
-				int A=3500;
-				int B=10;
+				int N=100;
+				int DC=543;
+				int A=4000;
+				int B=13;
 
 				// Monte Carlo Data ////////////////////////////////////////////////////
 				// Get input files//////////////////////////////////////////////////////
@@ -229,10 +229,10 @@ cout<<"min ePix"<< minePix<<endl;
 					h_mc_n -> SetMarkerStyle(24);
 
 					//int norm=1; //Normalization
-					clusters->SetLogy(1);
+					//clusters->SetLogy(1);
 					//Double_t scale_exp = norm/h_exp_n->Integral();
 					//h_exp_n->Scale(scale_exp);
-					h_exp_n->SetMaximum(58000);
+					h_exp_n->SetMaximum(4000);
 					h_exp_n ->Draw("HIST E1");
 					//clusters->SaveAs( "./figures/Dist_n_exp.png");
 

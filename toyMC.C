@@ -363,8 +363,29 @@ cout<< "Starting to save fits files ..."<<endl;
     fits_write_pix(outClusterptr3, TDOUBLE, fpixel, sizeArray, pix_total, &status);
     fits_close_file(outClusterptr3,  &status);
     cout<< "real_interactions+dc.fits saved "<<endl;
+    
 
 ////////////////////////////////////////////////////////////////////////
+
+///////////////  Real Interactions + Dark Current///////////////////////
+/////////////////////   COPY IN MEGASYNC   ///////////////////////////////////
+	
+	status = 0;
+	std::string outMeanFitsFile4 = "/home/mariano/MEGAsync/MC_copy/MC_N0=";
+    cout<< "status "<< status<<endl;
+    fitsfile *outClusterptr4;
+    cout<< "status "<< status<<endl;
+    fits_create_file(&outClusterptr4, (outMeanFitsFile4+std::to_string(N0)+"_DC="+std::to_string(darkC)+"_A="+ std::to_string(A)+"_B="+ std::to_string(B)+"_R="+ std::to_string(R)+".fits").c_str(), &status);
+    cout<< "status "<< status<<endl;
+	fits_create_img(outClusterptr4, -32, naxis, naxesOut, &status);
+	cout<< "status "<< status<<endl;
+    fits_write_pix(outClusterptr4, TDOUBLE, fpixel, sizeArray, pix_total, &status);
+    cout<< "status "<< status<<endl;	
+    fits_close_file(outClusterptr4,  &status);
+    cout<< "real_interactions+dc.fits saved in MEGA"<<endl;
+
+////////////////////////////////////////////////////////////////////////
+
 }
 
 // Plot histograms /////////////////////////////////////////////////////

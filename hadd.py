@@ -4,11 +4,11 @@ import os,sys
 
 
 command = ""
-for N in range(400,401):
-	for iDC in range(0,1):
-		DC=iDC*10
-		for A in [1]: 
-			for B in [1]: 
+for N in range(100,101):
+	for iDC in range(1,2):
+		DC=iDC*543
+		for A in [4000]: 
+			for B in [4,7,10,13,16]: 
 				command += "hadd output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+".root" output_N0="+str(N)+"_DC="+str(DC)+"_A="+str(A)+"_B="+str(B)+"_R=*.root" && "
 command = command[:-2]     
 print command
