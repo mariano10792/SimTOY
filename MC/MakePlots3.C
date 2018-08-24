@@ -157,8 +157,8 @@ cout<<"min ePix"<< minePix<<endl;
 				//for(int B=30;B<31; B=B++){
 				int N=100;
 				int DC=543;
-				int A=4000;
-				int B=13;
+				int A=5000;
+				int B=7;
 
 				// Monte Carlo Data ////////////////////////////////////////////////////
 				// Get input files//////////////////////////////////////////////////////
