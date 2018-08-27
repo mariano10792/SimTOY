@@ -1,0 +1,29 @@
+<sigma
+  default="28"
+/>
+
+<calibration
+  default="1"
+  ext2="1"
+  ext3="1"
+  ext4="1" 
+  ext5="1"
+/>
+
+
+<thr
+  seed="4"
+  add="3.4"
+  skirtSize="5"
+/>
+
+<extra
+  saveTracks="1"
+  saveTrackCuts=""
+/> 
+  
+
+<systemConfig
+  stackSize="256"
+  hitMaxSize="5000"
+/>

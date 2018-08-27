@@ -87,7 +87,7 @@ void MakePlots4(){
 
 cout<<"min ePix: "<< minePix<<endl;
 
-					TFile * f_exp = TFile::Open("55Fe_exp.root");
+					TFile * f_exp = TFile::Open("../mejor/output_2.root");
 					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
 					TTree * texp = (TTree*) f_exp->Get("hitSumm");
 
@@ -119,7 +119,7 @@ cout<<"min ePix: "<< minePix<<endl;
 					for(int i_event=0;i_event<Entries_exp; i_event++){
 					texp->GetEntry(i_event);
 
-							if (ohdu == ohdu_numer) {
+				//			if (ohdu == ohdu_numer) {
 								if (e>emin && e<emax){  // number of electrons
                   if (n==ene){
 
@@ -159,7 +159,7 @@ cout<<"min ePix: "<< minePix<<endl;
                     }
 									}
 								}
-							}
+					//		}
 						}
 						// aca calculamos varianza y media
 
@@ -184,6 +184,8 @@ cout<<"min ePix: "<< minePix<<endl;
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
+
+/*
 
 	//for(int N=1000;N<1001; N++){
 		//for(int DC=1000;DC<1001; DC=DC++){
@@ -258,6 +260,8 @@ cout<<"min ePix: "<< minePix<<endl;
 
 
 					}
+					
+					*/
 
 				for (int g=1; g<nbins+1; g++){
 					cout << "n = " << g << " mean_exp " << mean_exp[g] << endl;
