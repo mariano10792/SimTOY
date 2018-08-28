@@ -4,13 +4,13 @@
 import os,sys
 #
 command = ""
-#for N in range(100,101):
+for N in range(2,11):
 #	for iDC in range(1,2):
 #		DC=iDC*543
 #		for A in [5000]: 
 #			for B in [7]: 
-for R in range(1,128):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
-					command += "./skExtract.exe -c extractConfig.xml merge"+str(R)+".fits -o output_"+str(R)+".root"+" && "
+	for R in range(1,128):   # Este loop determina cuantas veces se repite el MC con los mismos parametros
+					command += "./skExtract.exe -c extractConfig.xml ./grupos_de_"+str(N)+"/*.fits -o ./grupos_de_"+str(N)+"/*.root"+" && "
 command = command[:-3]     
 print command
 os.system(command)

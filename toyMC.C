@@ -356,7 +356,7 @@ cout<< "Starting to save fits files ..."<<endl;
 */
 ///////////////  Real Interactions + Dark Current///////////////////////
 
-	std::string outMeanFitsFile3 = "./MC/corrida001/MC_N0=";
+	std::string outMeanFitsFile3 = "./MC/25deagosto/MC_N0=";
     fitsfile *outClusterptr3;
     fits_create_file(&outClusterptr3, (outMeanFitsFile3+std::to_string(N0)+"_DC="+std::to_string(darkC)+"_A="+ std::to_string(A)+"_B="+ std::to_string(B)+"_R="+ std::to_string(R)+".fits").c_str(), &status);
 	fits_create_img(outClusterptr3, -32, naxis, naxesOut, &status);
@@ -372,15 +372,10 @@ cout<< "Starting to save fits files ..."<<endl;
 	
 	status = 0;
 	std::string outMeanFitsFile4 = "/home/mariano/MEGAsync/MC_copy/MC_N0=";
-    cout<< "status "<< status<<endl;
     fitsfile *outClusterptr4;
-    cout<< "status "<< status<<endl;
     fits_create_file(&outClusterptr4, (outMeanFitsFile4+std::to_string(N0)+"_DC="+std::to_string(darkC)+"_A="+ std::to_string(A)+"_B="+ std::to_string(B)+"_R="+ std::to_string(R)+".fits").c_str(), &status);
-    cout<< "status "<< status<<endl;
 	fits_create_img(outClusterptr4, -32, naxis, naxesOut, &status);
-	cout<< "status "<< status<<endl;
     fits_write_pix(outClusterptr4, TDOUBLE, fpixel, sizeArray, pix_total, &status);
-    cout<< "status "<< status<<endl;	
     fits_close_file(outClusterptr4,  &status);
     cout<< "real_interactions+dc.fits saved in MEGA"<<endl;
 
@@ -505,6 +500,9 @@ cout<<"Content of pix variables saved into fits files"<<endl;
 // Histograms (not checked)
 // hist(h1,h2,h3,h4,h5,h6,h7);
 
+
+
+/*
 // Show CCD 2D plot ////////////////////////////////////////////////////
 	ch2p2->Divide(2,2);
 	ch2p2->cd(1);
@@ -521,7 +519,7 @@ cout<<"Content of pix variables saved into fits files"<<endl;
 	ch2p2->Print(ps+"[");
 	ch2p2->Print(ps);
 	ch2p2->Print(ps+"]");
-
+*/
 	t.Stop();
 	t.Print();
 
