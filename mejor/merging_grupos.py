@@ -5,15 +5,15 @@ import os,sys
 
 #this script merges fits file in groupos or 2,3,4 or whatever. The only condition is that they are named as they are numbered: "1.fits, 2.fits, etc"
 
-for h in range(1,2):
+for h in range(1,26):
 	a=h #amount or files i wanna merge
 	B=127/a # number of group of files merged
 	#b=round(B)
-	tt = np.zeros((50,500))
+
 	command = "mkdir grupos_de_"+str(a)+""
 	os.system(command)
 	for j in range(1,B+1):
-	
+		tt = np.zeros((50,500))	
 		for i in range (1,a+1):
 			k1=a*(j-1)+i
 			hdu1 = fits.open('/home/mariano/Desktop/SimTOY/mejor/'+str(k1)+'.fits')
