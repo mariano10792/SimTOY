@@ -16,7 +16,7 @@ for h in range(1,26):
 		tt = np.zeros((50,500))	
 		for i in range (1,a+1):
 			k1=a*(j-1)+i
-			hdu1 = fits.open('/home/mariano/Desktop/SimTOY/mejor/'+str(k1)+'.fits')
+			hdu1 = fits.open('/home/mariano/Desktop/SimTOY/mejor/fits/'+str(k1)+'.fits')
 			t=hdu1[3].data
 			tt=tt+t
 		
