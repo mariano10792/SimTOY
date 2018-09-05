@@ -37,7 +37,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int emin =1505 ; int emax = 1585;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
-  int bines = 100;
+  int bines = 20;
   float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = 3;
+  int nbins = 6;
 
   const int maxClusterSize = 50000;
 
@@ -86,7 +86,7 @@ void fano_calculator3(){
 // Get input files//////////////////////////////////////////////////////
 
 cout<<"min ePix: "<< minePix<<endl;
-					int M=2;
+					int M=8;
 					
 					ofstream myfile;
 					myfile.open ("../mejor/figures/example.txt");	
@@ -192,12 +192,12 @@ cout<<"min ePix: "<< minePix<<endl;
 						}
 						// aca calculamos varianza y media
  
-						h_exp_e[ene]->Fit("gaus");
+						h_exp_e[ene]->Fit("gaus","Quiet");
 						TF1 *fit1 = (TF1*)h_exp_e[ene]->GetFunction("gaus");
 
 						TCanvas*  canvitas   = new TCanvas("clusters","clusters",800,500);
 						canvitas->cd();
-						fit1->Draw("HIST E1");
+						fit1->Draw();
 						h_exp_e[ene]->Draw("HIST E1 same");
 						canvitas->SaveAs(("../mejor/figures/Fit_M="+itos(m)+"_N="+itos(ene)+".png").c_str());
 
@@ -222,7 +222,115 @@ cout<<"min ePix: "<< minePix<<endl;
 					
 	} //closes for 
 	myfile.close();
-						
+	
+		TCanvas *c2 = new TCanvas("c2","",200,10,1600,1000);
+		c2->SetFillColor(42);
+		c2->SetGrid();
+		c2->Divide(3,2);
+		
+	for (int j=0; j<nbins;j++){
+			
+		
+		double x[M];
+		double y[M];
+		double x_er[M];
+		double y_er[M];
+		for (Int_t i=0;i<M;i++) {
+		 x[i] = i+1;
+		 x_er[i] =0;
+		 y[i] = sigma_exp_fit[j+1][i+1];
+		 y_er[i] = sigma_exp_fit_error[j+1][i+1];
+		}
+	   c2->cd(j+1);
+	   
+	   	   
+	   //TGraph *gr = new TGraph(M,x,y);
+	   TGraphErrors *gr = new TGraphErrors(M,x,y,x_er,y_er); 
+	   
+	   gr->SetMinimum(10);
+	   gr->SetMaximum(20);
+	   gr->SetLineColor(j+1);
+	   gr->SetLineWidth(4);
+	   gr->SetMarkerColor(4);
+	   gr->SetMarkerStyle(21);
+	   gr->SetTitle(("n="+itos(j+1)+"").c_str());
+	   gr->GetXaxis()->SetTitle("M");
+	   gr->GetYaxis()->SetTitle("Fano Factor");
+	   gr->Draw("AP");
+
+	   // TCanvas::Update() draws the frame, after which one can change it
+	   //c1->Update();
+	   //c1->GetFrame()->SetFillColor(21);
+	   //c1->GetFrame()->SetBorderSize(12);
+	   //c1->Modified();
+	   
+	   
+	    
+	}
+	
+		
+		c2->SaveAs(("../mejor/figures/SigmaGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+".png").c_str());
+		
+		
+		
+		TCanvas *c1 = new TCanvas("c1","",200,10,1600,1000);
+		c1->SetFillColor(42);
+		c1->SetGrid();
+		c1->Divide(3,2);
+		
+	for (int j=0; j<nbins;j++){
+			
+		
+		double x[M];
+		double y[M];
+		double x_er[M];
+		double y_er[M];
+		for (Int_t i=0;i<M;i++) {
+		 x[i] = i+1;
+		 x_er[i] =0;
+		 y[i] = fano_exp_fit[j+1][i+1];
+		 y_er[i] = fano_exp_fit_error[j+1][i+1];
+		}
+	   c1->cd(j+1);
+	   
+	   double promedio = TMath::Mean(M,&y[0]);
+	   double RMS = TMath::RMS(M,&y[0]);
+	   double prom[M];
+	   
+	   for (int k=0; k<M;k++) {prom[k] = promedio; rms[k]=}
+	   
+	   cout << "promedio para n =" << j+1 <<"	" << promedio <<"+-" << RMS << endl;
+	   
+	   //TGraph *gr = new TGraph(M,x,y);
+	   TGraphErrors *gr = new TGraphErrors(M,x,y,x_er,y_er); 
+	   
+	   
+	   
+	   gr->SetMinimum(0.1);
+	   gr->SetMaximum(0.2);
+	   gr->SetLineColor(j+1);
+	   gr->SetLineWidth(4);
+	   gr->SetMarkerColor(4);
+	   gr->SetMarkerStyle(21);
+	   gr->SetTitle(("n="+itos(j+1)+"").c_str());
+	   gr->GetXaxis()->SetTitle("M");
+	   gr->GetYaxis()->SetTitle("Fano Factor");
+		gr->Draw("AP");   
+	   
+	   	   
+	   // TCanvas::Update() draws the frame, after which one can change it
+	   //c1->Update();
+	   //c1->GetFrame()->SetFillColor(21);
+	   //c1->GetFrame()->SetBorderSize(12);
+	   //c1->Modified();
+	   
+	   
+	   
+	}
+	TGraph *grr = new TGraph(M,x,prom); 
+	grr->Draw("AC same");
+	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+".png").c_str());
+
 }
 
 
@@ -255,7 +363,6 @@ void Enable_and_Set_Branches(TTree* & tree){
 
 
 
-
 /*
 void graph() {
    //Draw a simple graph
@@ -267,13 +374,14 @@ void graph() {
    c1->SetFillColor(42);
    c1->SetGrid();
 
-   const Int_t n = 20;
+   const Int_t n = 10;
    Double_t x[n], y[n];
-   for (Int_t i=0;i<n;i++) {
-     x[i] = i*0.1;
-     y[i] = 10*sin(x[i]+0.2);
+   for (Int_t i=0;i<M;i++) {
+     x[i] = i*+1;
+     y[i] = fano_exp_fit[1][i+1];
      printf(" i %i %f %f \n",i,x[i],y[i]);
    }
+   
    TGraph *gr = new TGraph(n,x,y);
    gr->SetLineColor(2);
    gr->SetLineWidth(4);
@@ -290,3 +398,4 @@ void graph() {
    c1->GetFrame()->SetBorderSize(12);
    c1->Modified();
 }
+*/
