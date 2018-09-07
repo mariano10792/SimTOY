@@ -34,11 +34,11 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =0 ; int emax = 200;
+  int emin =0 ; int emax = 5;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int   bines = 7;
-  float minePix = 10; // will be clasified as 1e-
+  float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = xmax*10+1;
+  int nbins = xmax*100+1;
 
   const int maxClusterSize = 50000;
 
@@ -107,15 +107,16 @@ cout<<"min ePix"<< minePix<<endl;
 					for(int i_event=0;i_event<Entries_exp; i_event++){
 
 					texp->GetEntry(i_event);
+					
 
-						if (ohdu == ohdu_numer) {
+						if (ohdu == ohdu_numer) { 
 							if (e>emin && e<emax){  // number of electrons
 
 								// Check if one of the pixels in the cluster is smaller that minePix
-								bool LowPixInCluster = false;
+								bool LowPixInCluster = true;
 								for (int p = 0; p < nSavedPix; ++p){
 									if(ePix[p]<minePix){
-										LowPixInCluster = true;
+										LowPixInCluster = false;
 										break;
 									}
 								}
@@ -172,6 +173,7 @@ cout<<"min ePix"<< minePix<<endl;
 				// Get input files//////////////////////////////////////////////////////
 
 
+
 					TFile * f_mc = TFile::Open(("./Grilla DC A=3500 B=10/output_N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+".root").c_str());
 
 					if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
@@ -205,7 +207,7 @@ cout<<"min ePix"<< minePix<<endl;
 									
 
 										// Fill the histogram with the variable n
-											h_exp_n -> Fill(e);
+											h_exp_n -> Fill(0);
 					
 
 								    	// Fill the histogram with the variable ePix

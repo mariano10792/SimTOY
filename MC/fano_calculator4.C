@@ -80,18 +80,22 @@ string itos(const int i){
 
 
 
-void fano_calculator3(){
+void fano_calculator4(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
 
 cout<<"min ePix: "<< minePix<<endl;
-					int M=14;
+					int M=1;
 					
 					ofstream myfile;
 					myfile.open ("../mejor/figures/example.txt");	
 
-				
+
+					TH1D * h_exp_e_total  =  new TH1D("h_exp_e_total","", 3000, emin, emax);
+					h_exp_e_total -> Sumw2();
+					
+				 
 					double mean_exp_fit[nbins][M];
 					double sigma_exp_fit[nbins][M];
 					double fano_exp_fit[nbins][M];
@@ -179,12 +183,13 @@ cout<<"min ePix: "<< minePix<<endl;
       									if (yBary>3 && yBary<48){
 
                  // cout << "i= "<< i << endl;
-									h_exp_e[ene]->Fill(e);
-									
-
-							
-									i++;
-                          }
+									for (int p = 0; p < ene; ++p){
+											h_exp_e[ene] -> Fill(ePix[p]);
+											h_exp_e_total->Fill(ePix[p]);
+											
+											//J++;
+											}
+											                          }
                         }
                       }
                     }
@@ -201,7 +206,7 @@ cout<<"min ePix: "<< minePix<<endl;
 						canvitas->cd();
 						fit1->Draw();
 						h_exp_e[ene]->Draw("HIST E1 same");
-						canvitas->SaveAs(("../mejor/figures/Fit_M="+itos(m)+"_N="+itos(ene)+"Fano3.png").c_str());
+						canvitas->SaveAs(("../mejor/figures/Fit_M="+itos(m)+"_N="+itos(ene)+"Fano4.png").c_str());
 
 
 						sigma_exp_fit[ene][m]= fit1->GetParameter(2);
@@ -226,9 +231,7 @@ cout<<"min ePix: "<< minePix<<endl;
 	} //closes for 
 	myfile.close();
 	
-	
-	
-	
+		
 		TCanvas *c3 = new TCanvas("c3","",200,10,1600,1000);
 		c3->SetFillColor(42);
 		c3->SetGrid();
@@ -286,7 +289,7 @@ cout<<"min ePix: "<< minePix<<endl;
 	}
 	//TGraph *grr = new TGraph(M,x,prom); 
 	//grr->Draw("AC same");
-	c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
+	c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
 	
 		TCanvas *c2 = new TCanvas("c2","",200,10,1600,1000);
 		c2->SetFillColor(42);
@@ -334,7 +337,7 @@ cout<<"min ePix: "<< minePix<<endl;
 	}
 	
 		
-		c2->SaveAs(("../mejor/figures/SigmaGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
+		c2->SaveAs(("../mejor/figures/SigmaGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
 		
 		
 		
@@ -372,8 +375,8 @@ cout<<"min ePix: "<< minePix<<endl;
 	   auto promedio_str = std::to_string(promedio);
 	   auto rms_str = std::to_string(RMS);
 	   
-	   gr->SetMinimum(0.0);
-	   gr->SetMaximum(0.3);
+	   gr->SetMinimum(0.095);
+	   gr->SetMaximum(0.2);
 	   gr->SetLineColor(j+1);
 	   gr->SetLineWidth(4);
 	   gr->SetMarkerColor(4);
@@ -395,7 +398,13 @@ cout<<"min ePix: "<< minePix<<endl;
 	}
 	//TGraph *grr = new TGraph(M,x,prom); 
 	//grr->Draw("AC same");
-	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
+	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+
+		TCanvas *c4 = new TCanvas("c4","",200,10,1600,1000);
+		c4->cd();
+		h_exp_e_total->Draw();
+	
+
 
 }
 
