@@ -297,22 +297,23 @@ cout<<"min ePix: "<< minePix<<endl;
 	   double RMS = TMath::RMS(M,&y[0]);
 	   double prom[M];
 	   
-	   for (int k=0; k<M;k++) {prom[k] = promedio; rms[k]=}
+	   
 	   
 	   cout << "promedio para n =" << j+1 <<"	" << promedio <<"+-" << RMS << endl;
 	   
 	   //TGraph *gr = new TGraph(M,x,y);
 	   TGraphErrors *gr = new TGraphErrors(M,x,y,x_er,y_er); 
 	   
+	   auto promedio_str = std::to_string(promedio);
+	   auto rms_str = std::to_string(RMS);
 	   
-	   
-	   gr->SetMinimum(0.1);
+	   gr->SetMinimum(0.095);
 	   gr->SetMaximum(0.2);
 	   gr->SetLineColor(j+1);
 	   gr->SetLineWidth(4);
 	   gr->SetMarkerColor(4);
 	   gr->SetMarkerStyle(21);
-	   gr->SetTitle(("n="+itos(j+1)+"").c_str());
+	   gr->SetTitle(("n="+itos(j+1)+"_prom="+promedio_str+"+-"+rms_str+"").c_str());
 	   gr->GetXaxis()->SetTitle("M");
 	   gr->GetYaxis()->SetTitle("Fano Factor");
 		gr->Draw("AP");   
@@ -327,8 +328,8 @@ cout<<"min ePix: "<< minePix<<endl;
 	   
 	   
 	}
-	TGraph *grr = new TGraph(M,x,prom); 
-	grr->Draw("AC same");
+	//TGraph *grr = new TGraph(M,x,prom); 
+	//grr->Draw("AC same");
 	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M=+"+itos(M)+"_minePix="+itos(minePix)+".png").c_str());
 
 }
