@@ -80,7 +80,7 @@ string itos(const int i){
 
 
 
-void fano_calculator4(){
+void fano_calculator5(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
@@ -183,13 +183,7 @@ cout<<"min ePix: "<< minePix<<endl;
       									if (yBary>3 && yBary<48){
 
                  // cout << "i= "<< i << endl;
-                      double e_temp = 0;
-									for (int p = 0; p < ene; ++p){
-											e_temp+=ePix[p];
-											//J++;
-											}
-                      h_exp_e[ene] -> Fill(e_temp);
-											h_exp_e_total->Fill(e_temp);
+				                  h_exp_e[ene]->Fill(e);
 
 											    }
                         }
@@ -221,7 +215,7 @@ cout<<"min ePix: "<< minePix<<endl;
             h_exp_e[ene]->Draw("HIST E1");
             fit1->Draw("same");
 
-						canvitas->SaveAs(("../mejor/figures/Fit_M="+itos(m)+"_N="+itos(ene)+"Fano4.png").c_str());
+						canvitas->SaveAs(("../mejor/figures/Fit_M="+itos(m)+"_N="+itos(ene)+"Fano3.png").c_str());
 
 
 						sigma_exp_fit[ene][m]= fit1->GetParameter(2);
@@ -283,7 +277,7 @@ for (int j=0; j<nbins;j++){
 }
 
 
-c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
 
 		TCanvas *c3 = new TCanvas("c3","",200,10,1600,1000);
 		c3->SetFillColor(42);
@@ -334,7 +328,7 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 
 	}
 
-	c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+	c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
 
 		TCanvas *c2 = new TCanvas("c2","",200,10,1600,1000);
 		c2->SetFillColor(42);
@@ -374,7 +368,7 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 	}
 
 
-		c2->SaveAs(("../mejor/figures/SigmaGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+		c2->SaveAs(("../mejor/figures/SigmaGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
 
 		TCanvas *c1 = new TCanvas("c1","",200,10,1600,1000);
 		c1->SetFillColor(42);
@@ -427,7 +421,7 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 	}
 
 
-	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+	c1->SaveAs(("../mejor/figures/FanoGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano3.png").c_str());
 
 		TCanvas *c0 = new TCanvas("c0","",200,10,1600,1000);
 		c0->cd();
