@@ -92,7 +92,7 @@ cout<<"min ePix"<< minePix<<endl;
 					TFile * f_exp = TFile::Open("55Fe_exp.root");
 					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
 					TTree * texp = (TTree*) f_exp->Get("hitSumm");
-					TH1D * h_exp_n  =  new TH1D("h_exp_n", "Distribucion de tamanio de clusters", nbins, xmin, xmax);
+					TH1D * h_exp_n  =  new TH1D("h_exp_n", "Distribucion de tamano de clusters", nbins, xmin, xmax);
 					h_exp_n -> Sumw2();
 
 					int Entries_exp = texp -> GetEntries();
@@ -168,7 +168,7 @@ cout<<"min ePix"<< minePix<<endl;
 
 					if (!f_mc->IsOpen()) {std::cerr << "ERROR: cannot open the root file with MC data" << std::endl;}
 					TTree * tmc    = (TTree*) f_mc->Get("hitSumm");
-					TH1D * h_mc_n      =  new TH1D("h_mc_n", ("Distribucion de tamanio de clusters -- N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(), nbins, xmin, xmax);
+					TH1D * h_mc_n      =  new TH1D("h_mc_n", ("Distribucion de tamano de clusters -- N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(), nbins, xmin, xmax);
 					h_mc_n -> Sumw2();
 
 					int Entries_mc = tmc -> GetEntries();
@@ -211,19 +211,23 @@ cout<<"min ePix"<< minePix<<endl;
 
 
 				// Plot histograms /////////////////////////////////////////////////////
-					TCanvas*  clusters   = new TCanvas("clusters","clusters",1200,1200);
+
+          TCanvas*  clusters   = new TCanvas("clusters","clusters",1200,1200);
 					clusters->cd();
 					gStyle->SetOptStat(0);
 					//gPad->DrawFrame(0.5,0.85,3.5,1.1,"Summary of fit results;;Fit Bias");
 
-					h_exp_n -> SetLineColor(kRed +3);
+					h_exp_n -> SetLineColor(kRed);
 					h_mc_n -> SetLineColor(kBlue);
 
-					h_exp_n -> SetMarkerColor(kRed +3);
+          h_exp_n -> SetLineWidth(2.0);
+					h_mc_n -> SetLineWidth(2.0);
+
+					h_exp_n -> SetMarkerColor(kRed);
 					h_mc_n -> SetMarkerColor(kBlue);
 
-					h_exp_n -> SetMarkerSize(1.0);
-					h_mc_n -> SetMarkerSize(1.0);
+					h_exp_n -> SetMarkerSize(2.0);
+					h_mc_n -> SetMarkerSize(2.0);
 
 					h_exp_n -> SetMarkerStyle(24);
 					h_mc_n -> SetMarkerStyle(24);
@@ -232,7 +236,7 @@ cout<<"min ePix"<< minePix<<endl;
 					//clusters->SetLogy(1);
 					//Double_t scale_exp = norm/h_exp_n->Integral();
 					//h_exp_n->Scale(scale_exp);
-					h_exp_n->SetMaximum(4000);
+					h_exp_n->SetMaximum(3500);
 					h_exp_n ->Draw("HIST E1");
 					//clusters->SaveAs( "./figures/Dist_n_exp.png");
 
@@ -272,20 +276,18 @@ cout<<"min ePix"<< minePix<<endl;
 					lg->SetTextSize(0.03146);
 					lg->SetFillColor(10);
 					lg->SetFillStyle(1001);
-					lg->AddEntry(h_mc_n,("MC N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(),"l");
-					lg->AddEntry(h_mc_n,("emin="+itos(emin)+"_emax="+itos(emax)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)).c_str(),"l");
-					lg->AddEntry(h_mc_n,("Cond: x_yBary ; ePix =! 305"),"l");
-					
-					/*
-					lg->AddEntry(h_exp_n,("Datos -             Chi2: "+itos(chi2)).c_str(),"l");
-					lg->AddEntry(h_mc_n,("MC N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(),"l");
-					lg->AddEntry(h_mc_n,(,"l");
-					*/
-					//lg->AddEntry(chi2,"Chi cuadrado","l");
-					lg->Draw("same");
-					
-					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)+"_LOG.png").c_str());
+					//lg->AddEntry(h_mc_n,("MC N0="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)).c_str(),"l");
+					//lg->AddEntry(h_mc_n,("emin="+itos(emin)+"_emax="+itos(emax)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)).c_str(),"l");
+          lg->AddEntry(h_mc_n,("Datos simulados"),"l");
+          lg->AddEntry((TObject*)0, ("N0="+itos(N)+" DC="+itos(DC)+" A="+itos(A)+" B="+itos(B)).c_str(), "");
+          lg->AddEntry(h_exp_n,"Datos experimentales","l");
 
+
+					lg->Draw("same");
+
+					clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)+"_para dario.png").c_str());
+          clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)+"_para dario.root").c_str());
+          clusters->SaveAs(("Dist_n_MC_N="+itos(N)+"_DC="+itos(DC)+"_A="+itos(A)+"_B="+itos(B)+"_minePix="+itos(minePix)+"_emin="+itos(emin)+"_emax="+itos(emax)+"_para dario.pdf").c_str());
 					gPad->Update();
 					//getchar();
 					if (chi2 < 50) {
