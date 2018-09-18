@@ -36,7 +36,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =1485 ; int emax = 1605;
+  int emin =1505 ; int emax = 1590;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int bines = 20;
@@ -315,8 +315,8 @@ if (j==nbins-1) {gr->SetTitle(("Eventos para n =< "+itos(j)+"").c_str());}
 
 
 
-c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
-c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.root").c_str());
+    c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+    c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.root").c_str());
 
 
 		TCanvas *c3 = new TCanvas("c3","",200,10,1700,1000);
@@ -368,8 +368,8 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 
 	}
 
-	c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
-  c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.root").c_str());
+	   c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.png").c_str());
+     c3->SaveAs(("../mejor/figures/MeanGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"_minePix="+itos(minePix)+"Fano4.root").c_str());
 
 
 		TCanvas *c2 = new TCanvas("c2","",200,10,1700,1000);
@@ -462,7 +462,7 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 
 
 	   gr->SetMinimum(0.095);
-	   gr->SetMaximum(0.2);
+	   gr->SetMaximum(0.18);
 	   gr->SetLineColor(j+1);
 	   gr->SetLineWidth(4);
 	   gr->SetMarkerColor(1);
