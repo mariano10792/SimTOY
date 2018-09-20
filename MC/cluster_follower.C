@@ -88,128 +88,299 @@ string itos(const int i){
 
 
 
-void fano_calculator4_1(){
+void cluster_follower(){
 
 // Experimental Data ///////////////////////////////////////////////////
 // Get input files//////////////////////////////////////////////////////
 
 cout<<"min ePix: "<< minePix<<endl;
-					int M=8;
+					int M=5; //this will be done in order to look initially at fits 1+M*k k>=0 (1,6,11,16,etc)
+          int I=0; //this integer is used for the fake run
+          int K=1; // 24 because 24*M+1=121 and we got 127 fits (with this we go til 126).
+          int i=0; //length of the m=1 events list (list_m1)
 
-					ofstream myfile;
-					myfile.open ("../mejor/figures/example.txt");
-
-
-
-
-					double mean_exp_fit[nbins][M];
-					double sigma_exp_fit[nbins][M];
-					double fano_exp_fit[nbins][M];
-
-					double mean_exp_fit_error[nbins][M];
-					double sigma_exp_fit_error[nbins][M];
-					double fano_exp_fit_error[nbins][M];
-
-					double events_exp_fit[nbins][M];
-					double events_exp_fit_error[nbins][M];
+					//ofstream myfile;
+					//myfile.open ("../mejor/figures/example.txt");
 
 
-
-
-					//vector<double> mean_exp_fit(nbins+1,M+1);
-					//vector<double> sigma_exp_fit(nbins+1,M+1);
-					//vector<double> fano_exp_fit(nbins+1,M+1);
-
-					//vector<double> mean_exp_fit_error(nbins+1,M+1);
-					//vector<double> sigma_exp_fit_error(nbins+1,M+1);
-					//vector<double> fano_exp_fit_error(nbins+1,M+1);
-
-					//vector<double> events_exp_fit(nbins+1,M+1);
-
-
-
-					for(int m=0;m<M+1;++m){
-
-            TH1D * h_exp_e_total  =  new TH1D("h_exp_e_total","", 20, emin, emax);
-  					h_exp_e_total -> Sumw2();
-
-
-					if (m==0) {continue;}
-					TFile * f_exp = TFile::Open(("../mejor/merged_"+itos(m)+".root").c_str());
-					if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
-					TTree * texp = (TTree*) f_exp->Get("hitSumm");
-
-
-					// esto no se que hace...
-					TH1D * h_exp_e[nbins+1];
+          TH1D * h_exp_e[M];
 					TString histname_tmp_exp;
 
-					//for each n
-					for(int ystarbin=0;ystarbin<nbins+1;++ystarbin){
+	        for(int ystarbin=0;ystarbin<M;++ystarbin){
 					histname_tmp_exp  = "h_exp_e";
 					histname_tmp_exp += ystarbin;
 					h_exp_e[ystarbin] = new TH1D(histname_tmp_exp.Data(),"",bines,emin,emax);
 					h_exp_e[ystarbin]->Sumw2();
 					}
 
-					int Entries_exp = texp -> GetEntries();
-					cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
-
-					Enable_and_Set_Branches(texp);
-
-				// Get information from trees///////////////////////////////////////////
 
 
+          int of_list_m1[K+1];
+          int list_m1[5000][2];
 
-				for (int ene=0; ene<nbins+1; ene++){
-					int i = 0;
-					if (ene==0) {continue;}
-					for(int i_event=0;i_event<Entries_exp; i_event++){
-					texp->GetEntry(i_event);
+          for(int m=1;m<3;++m){
+            int l=1;
+            bool mybool =true;
+            if (m==2){
+              int list_m1[i][2];
+              } //creates list with the first fake run
+              int j=0; //position in the list_m1 list
+            for(int k=0;k<K+1;++k){
 
-				//			if (ohdu == ohdu_numer) {
-								if (e>emin && e<emax){  // number of electrons
+            if (mybool==false){l=l+M;}
+
+          // open file and set TTree
+          TFile * f_exp = TFile::Open(("../mejor/grupos_de_1/merge_"+itos(l)+"_"+itos(l)+".root").c_str());
+          if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
+          TTree * texp = (TTree*) f_exp->Get("hitSumm");
+          int Entries_exp = texp -> GetEntries();
+          cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
+          Enable_and_Set_Branches(texp);
+
+
+          cout<<"l = "<<l<<endl;
+
+
+          // Get information from trees///////////////////////////////////////////
+
+int t=0;
+          for (int ene=0; ene<nbins+1; ene++){
+
+          if (ene==0) {continue;}
+          for(int i_event=0;i_event<Entries_exp; i_event++){
+          texp->GetEntry(i_event);
+
+          //			if (ohdu == ohdu_numer) {
+                if (e>emin && e<emax){  // number of electrons
                   if (n==ene){
 
                     // Check if one of the pixels in the cluster is smaller that minePix
-      							bool noLowPixInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(ePix[p]<minePix){
-      									noLowPixInCluster = false;
-      									break;
-      								}
-      							}
-      							bool noBadTransferInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(xPix[p]==305){
-      									noBadTransferInCluster = false;
-      									break;
-      								}
-      							}
+                    bool noLowPixInCluster = true;
+                    for (int p = 0; p < nSavedPix; ++p){
+                      if(ePix[p]<minePix){
+                        noLowPixInCluster = false;
+                        break;
+                      }
+                    }
+                    bool noBadTransferInCluster = true;
+                    for (int p = 0; p < nSavedPix; ++p){
+                      if(xPix[p]==305){
+                        noBadTransferInCluster = false;
+                        break;
+                      }
+                    }
 
-      							if (noLowPixInCluster){
-      								if (noBadTransferInCluster){
-      								if (xBary>250 && xBary<490){
-      									if (yBary>3 && yBary<48){
+                    if (noLowPixInCluster){
+                      if (noBadTransferInCluster){
+                      if (xBary>250 && xBary<490){
+                        if (yBary>3 && yBary<48){
+                          t++;
+                          if (m==1){
+                            i++;
 
-                 // cout << "i= "<< i << endl;
-                      double e_temp = 0;
-									for (int p = 0; p < ene; ++p){
-											e_temp+=ePix[p];
-											//J++;
-											}
-                      h_exp_e[ene] -> Fill(e_temp);
-											h_exp_e_total->Fill(e_temp);
+                            of_list_m1[k]=i;
 
-											    }
+                            // if (k==0) {
+                            //   of_list_m1[k]=i;
+                            // }else{
+                            //   of_list_m1[k]=i;
+                            // }
+
+                          }
+                          if (m==2){
+                            list_m1[j][0]=yPix[0];
+                            list_m1[j][1]=xPix[0];
+                            h_exp_e[0]->Fill(e);
+                            j++;
+
+
+                          }
+                          cout << "t= " <<t<<endl;
+
+                          }
                         }
                       }
                     }
-									}
-								}
-					//	}
-						}
+                  }
+                }
+          	   }
+              }
+              if (l==1){mybool = false;}
+             }
+            }
 
+cout << i << endl;
+
+int of_list_m1_bis[K+1];
+
+for (int i = 0; i <K+1; i++) {
+
+  if (i==0) {
+    of_list_m1_bis[i]=of_list_m1[i];
+  }else{
+    of_list_m1_bis[i]=of_list_m1[i]-of_list_m1[i-1];
+
+  }
+
+
+  //cout << "list " << of_list_m1[i] << endl;
+  //cout << "nro of elements " <<of_list_m1_bis[i] << endl;
+}
+
+for (size_t j = 0; j < 64; j++) {
+  cout << "list " << list_m1[j][1] << endl;
+}
+
+
+
+
+
+
+
+
+
+            for(int m=2;m<3;++m){
+              int l=1;
+              bool mybool =true;
+              int j=0;
+
+              for(int k=0;k<K+1;++k){
+
+              if (mybool==false){l=l+M;}
+
+            // open file and set TTree
+            TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m+1)+"/merge_"+itos(l)+"_"+itos(l+m)+".root").c_str());
+            if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
+            TTree * texp = (TTree*) f_exp->Get("hitSumm");
+            cout<<"l = "<<l<<endl;
+            int Entries_exp = texp -> GetEntries();
+            cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
+
+            Enable_and_Set_Branches(texp);
+
+            // Get information from trees///////////////////////////////////////////
+
+
+            int t=0;
+            for (int ene=0; ene<nbins+1; ene++){
+
+            if (ene==0) {continue;}
+            for(int i_event=0;i_event<Entries_exp; i_event++){
+            texp->GetEntry(i_event);
+
+            //			if (ohdu == ohdu_numer) {
+                  if (e>emin && e<emax){  // number of electrons
+                    if (n==ene){
+
+                      // Check if one of the pixels in the cluster is smaller that minePix
+                      bool noLowPixInCluster = true;
+                      for (int p = 0; p < nSavedPix; ++p){
+                        if(ePix[p]<minePix){
+                          noLowPixInCluster = false;
+                          break;
+                        }
+                      }
+                      bool noBadTransferInCluster = true;
+                      for (int p = 0; p < nSavedPix; ++p){
+                        if(xPix[p]==305){
+                          noBadTransferInCluster = false;
+                          break;
+                        }
+                      }
+
+                      if (noLowPixInCluster){
+                        if (noBadTransferInCluster){
+                        if (xBary>250 && xBary<490){
+                          if (yBary>3 && yBary<48){
+                            t++;
+
+
+                              //// COMPARE AND SAVE
+                              //int x_temp=0;
+                              //int y_temp=0;
+                              for (int p = 0; p < ene; ++p){
+                                  //x_temp=xPix[p]; y_temp=yPix[p];
+
+
+                                  int x_resta;
+                                  int y_resta;
+                                  for (int i=0; i<of_list_m1_bis[k];i++){
+                                  //while (true){
+
+                                  if (k==0) {
+                                    x_resta=xPix[p]-list_m1[i][0];
+                                    y_resta=yPix[p]-list_m1[i][1];
+                                    }else{
+                                      x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
+                                      y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
+                                  }
+
+
+                          //            cout << "m= " <<m << endl;
+                                      if (x_resta==0 && y_resta==0){
+                                      h_exp_e[m]->Fill(e);
+
+                                      cout << "m= " <<m << endl;
+                                    //  cout << t << endl;
+                                      break;
+                                    }else{
+
+                                      continue;}
+
+                                  }
+                                  // cout << "xPix= " <<xPix[p] << " yPix " <<  yPix[p] << endl;
+                                  // cout << "t= " << t << endl;
+
+                              }
+
+
+
+
+
+              //                list_m1[j][1]=xPix[0];
+                //              list_m1[j][2]=yPix[0];
+                              //list_m1[j][2]=0;
+                              //list_m1[j][2]=0;
+                  //            j++;
+
+
+
+
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+            	   }
+                }
+                if (l==1){mybool = false;}
+               }
+              }
+
+
+// TCanvas *c1 = new TCanvas("c4","",200,10,1700,1000);
+// c1->SetFillColor(0);
+// c1->SetGrid();
+// c1->Divide(2,2);
+//
+// c1->cd(1);
+// h_exp_e[0]->Draw("");
+// c1->cd(2);
+// h_exp_e[1]->Draw("");
+// c1->cd(3);
+// h_exp_e[2]->Draw("");
+// c1->cd(4);
+// h_exp_e[3]->Draw("");
+
+
+
+
+
+
+
+
+/*
 
 
             ///////////
@@ -262,11 +433,17 @@ cout<<"min ePix: "<< minePix<<endl;
             }
 
 					}
-						// save to file
-						myfile << "Mean" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" << " # Events for M="<< m <<", increasing n" <<endl;
-						for(int i = 1; i < nbins+1; i ++) {
-						myfile  << mean_exp_fit[i][m]  << "	" << sigma_exp_fit[i][m] << "	" << fano_exp_fit[i][m] << "	" << fano_exp_fit_error[i][m]  << "	" <<  events_exp_fit[i][m] << endl;
-						}
+						// save to file --> dont' forget to uncomment upwards
+					//	myfile << "Mean" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" << " # Events for M="<< m <<", increasing n" <<endl;
+					//	for(int i = 1; i < nbins+1; i ++) {
+					//	myfile  << mean_exp_fit[i][m]  << "	" << sigma_exp_fit[i][m] << "	" << fano_exp_fit[i][m] << "	" << fano_exp_fit_error[i][m]  << "	" <<  events_exp_fit[i][m] << endl;
+
+            if (m==1){
+            m=0;
+            I++; //
+          } //this creates the run fake. To function it needs another instance above that only initiates with I=0. This instance must just count the number of events in the fits 1+M*k k>=0
+        }
+      }
 
 
 	} //closes for
@@ -484,6 +661,8 @@ c4->SaveAs(("../mejor/figures/EventosGraph_N="+itos(nbins)+"_hasta M="+itos(M)+"
 		// h_exp_e_total->Draw();
 
 
+
+*/
 
 }
 

@@ -5,7 +5,7 @@ import os,sys
 
 #this script merges fits file in groupos or 2,3,4 or whatever. The only condition is that they are named as they are numbered: "1.fits, 2.fits, etc"
 
-for h in range(1,2):
+for h in range(1,6):
 	a=h #amount or files i wanna merge
 	B=127/a # number of group of files merged
 	#b=round(B)
