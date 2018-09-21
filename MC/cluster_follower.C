@@ -96,7 +96,7 @@ void cluster_follower(){
 cout<<"min ePix: "<< minePix<<endl;
 					int M=5; //this will be done in order to look initially at fits 1+M*k k>=0 (1,6,11,16,etc)
           int I=0; //this integer is used for the fake run
-          int K=1; // 24 because 24*M+1=121 and we got 127 fits (with this we go til 126).
+          int K=24; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
           int i=0; //length of the m=1 events list (list_m1)
 
 					//ofstream myfile;
@@ -143,7 +143,8 @@ cout<<"min ePix: "<< minePix<<endl;
 
           // Get information from trees///////////////////////////////////////////
 
-int t=0;
+          int t=0;
+
           for (int ene=0; ene<nbins+1; ene++){
 
           if (ene==0) {continue;}
@@ -172,30 +173,30 @@ int t=0;
 
                     if (noLowPixInCluster){
                       if (noBadTransferInCluster){
-                      if (xBary>250 && xBary<490){
-                        if (yBary>3 && yBary<48){
-                          t++;
-                          if (m==1){
-                            i++;
+                        if (xBary>250 && xBary<490){
+                          if (yBary>3 && yBary<48){
+                              t++;
+                              if (m==1){
+                                i++;
 
-                            of_list_m1[k]=i;
+                                of_list_m1[k]=i;
 
-                            // if (k==0) {
-                            //   of_list_m1[k]=i;
-                            // }else{
-                            //   of_list_m1[k]=i;
-                            // }
+                                // if (k==0) {
+                                //   of_list_m1[k]=i;
+                                // }else{
+                                //   of_list_m1[k]=i;
+                                // }
 
-                          }
-                          if (m==2){
-                            list_m1[j][0]=yPix[0];
-                            list_m1[j][1]=xPix[0];
-                            h_exp_e[0]->Fill(e);
-                            j++;
+                              }
+                              if (m==2){
+                                list_m1[j][0]=xPix[0];
+                                list_m1[j][1]=yPix[0];
+                                h_exp_e[0]->Fill(e);
+                                j++;
 
 
-                          }
-                          cout << "t= " <<t<<endl;
+                              }
+                              cout << "t= " <<t<<endl;
 
                           }
                         }
@@ -239,7 +240,7 @@ for (size_t j = 0; j < 64; j++) {
 
 
 
-            for(int m=2;m<3;++m){
+            for(int m=2;m<5;++m){
               int l=1;
               bool mybool =true;
               int j=0;
@@ -318,7 +319,7 @@ for (size_t j = 0; j < 64; j++) {
 
                           //            cout << "m= " <<m << endl;
                                       if (x_resta==0 && y_resta==0){
-                                      h_exp_e[m]->Fill(e);
+                                      h_exp_e[m-1]->Fill(e);
 
                                       cout << "m= " <<m << endl;
                                     //  cout << t << endl;
@@ -359,19 +360,24 @@ for (size_t j = 0; j < 64; j++) {
               }
 
 
-// TCanvas *c1 = new TCanvas("c4","",200,10,1700,1000);
-// c1->SetFillColor(0);
-// c1->SetGrid();
-// c1->Divide(2,2);
-//
-// c1->cd(1);
-// h_exp_e[0]->Draw("");
-// c1->cd(2);
-// h_exp_e[1]->Draw("");
-// c1->cd(3);
-// h_exp_e[2]->Draw("");
-// c1->cd(4);
-// h_exp_e[3]->Draw("");
+TCanvas *c1 = new TCanvas("c4","",200,10,1700,1000);
+//c1->SetGrid();
+c1->Divide(2,2);
+
+for (size_t i = 0; i < 4; i++) {
+h_exp_e[i]->SetMarkerStyle(0);
+//h_exp_e[i]->SetMarkerSize(2);
+//h_exp_e[i] -> SetLineColor(kRed);
+}
+
+c1->cd(1);
+h_exp_e[0]->Draw("HIST E1");
+c1->cd(2);
+h_exp_e[1]->Draw("HIST E1 same");
+c1->cd(3);
+h_exp_e[2]->Draw("HIST E1 same");
+c1->cd(4);
+h_exp_e[3]->Draw("HIST E1 same");
 
 
 
