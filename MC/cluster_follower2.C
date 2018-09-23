@@ -36,10 +36,10 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
 // range for the number of electrons per cluster
-  int emin =1485 ; int emax = 1605;
+  int emin =1485 ; int emax = 6050;
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
-  int bines = 20;
+  int bines = 2000;
   float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
@@ -89,15 +89,17 @@ string itos(const int i){
 ////////////////////////////////////////////////////////////////////////
 
 
+//This version, on the other hand compares 1.fits with 1_2, 1_2_3 and 1_2_3_4 but doesnt jump to 6, it goes to 2, and then 3 allowing a
+// mayor base of data but paying the correlation of this. It's complementary of cluster_follower
 
-void cluster_follower(){
+void cluster_follower2(){
 
 
 
 cout<<"min ePix: "<< minePix<<endl;
 					int M=5; //this will be done in order to look initially at fits 1+M*k k>=0 (1,6,11,16,etc)
           int I=0; //this integer is used for the fake run
-          int K=24; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
+          int K=100; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
           int i=0; //length of the m=1 events list (list_m1)
 
 					//ofstream myfile;
@@ -117,13 +119,13 @@ cout<<"min ePix: "<< minePix<<endl;
 //As said, this part of the code creates a list of clusters with no merging (1.fits, 6.fits, etc).
 
           int of_list_m1[K+1];
-          int list_m1[5000][2];
+          int list_m1[50000][2];
           int l=1;
           bool mybool =true; //this bool is need for the l increment loop to function.
                int j=0; //position in the list_m1 list
             for(int k=0;k<K+1;++k){
 
-            if (mybool==false){l=l+M;}
+            if (mybool==false){l=l+1;}
 
           // open file and set TTree
           TFile * f_exp = TFile::Open(("../mejor/grupos_de_1/merge_"+itos(l)+"_"+itos(l)+".root").c_str());
@@ -235,7 +237,6 @@ for (size_t j = 0; j < 64; j++) {
 
 
 
-
 //this loop compares and saves in the TH1D.
 
 
@@ -247,7 +248,7 @@ for (size_t j = 0; j < 64; j++) {
 
               for(int k=0;k<K+1;++k){
 
-              if (mybool==false){l=l+M;}
+              if (mybool==false){l=l+1;}
 
             // open file and set TTree
             TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m+1)+"/merge_"+itos(l)+"_"+itos(l+m)+".root").c_str());
