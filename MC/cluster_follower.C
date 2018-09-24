@@ -240,7 +240,7 @@ for (size_t j = 0; j < 64; j++) {
 
 
 
-            for(int m=2;m<5;++m){
+            for(int m=2;m<6;++m){
               int l=1;
               bool mybool =true;
               int j=0;
@@ -250,7 +250,7 @@ for (size_t j = 0; j < 64; j++) {
               if (mybool==false){l=l+M;}
 
             // open file and set TTree
-            TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m+1)+"/merge_"+itos(l)+"_"+itos(l+m)+".root").c_str());
+            TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m)+"/merge_"+itos(l)+"_"+itos(l+m-1)+".root").c_str());
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
             cout<<"l = "<<l<<endl;
@@ -342,7 +342,7 @@ for (size_t j = 0; j < 64; j++) {
 
 TCanvas *c1 = new TCanvas("c4","",200,10,1700,1000);
 //c1->SetGrid();
-c1->Divide(2,2);
+c1->Divide(3,2);
 
 for (size_t i = 0; i < 4; i++) {
 //h_exp_e[i]->SetMarkerStyle(0);
@@ -358,6 +358,8 @@ c1->cd(3);
 h_exp_e[2]->Draw("HIST E1 same");
 c1->cd(4);
 h_exp_e[3]->Draw("HIST E1 same");
+c1->cd(5);
+h_exp_e[4]->Draw("HIST E1 same");
 
 
 
