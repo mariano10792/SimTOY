@@ -99,7 +99,7 @@ void cluster_follower2(){
 cout<<"min ePix: "<< minePix<<endl;
 					int M=5; //this will be done in order to look initially at fits 1+M*k k>=0 (1,6,11,16,etc)
           int I=0; //this integer is used for the fake run
-          int K=100; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
+          int K=120; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
           int i=0; //length of the m=1 events list (list_m1)
 
 					//ofstream myfile;
