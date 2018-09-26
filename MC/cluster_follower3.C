@@ -132,11 +132,11 @@ cout<<"min ePix: "<< minePix<<endl;
           if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
           TTree * texp = (TTree*) f_exp->Get("hitSumm");
           int Entries_exp = texp -> GetEntries();
-          cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
+          //cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
           Enable_and_Set_Branches(texp);
 
 
-          cout<<"l = "<<l<<endl;
+          //cout<<"l = "<<l<<endl;
 
 
           // Get information from trees///////////////////////////////////////////
@@ -233,8 +233,10 @@ for (int i = 0; i <K+1; i++) {
 
 //check the list
 
-for (size_t j = 0; j < 64; j++) {
-  cout << "list " << list_m1[j][2] << endl;
+for (size_t j = 0; j < K+1; j++) {
+//  cout << "list " << list_m1[j][2] << endl;
+// cout << "list " << of_list_m1[j] << endl;
+// cout << "list_bis " << of_list_m1_bis[j] << endl;
 }
 
 
@@ -245,9 +247,11 @@ for (size_t j = 0; j < 64; j++) {
 
 
 
-            for(int m=2;m<6;++m){
+            for(int m=2;m<3;++m){
+              //TFile::Close(("../mejor/grupos_de_"+itos(m)+"/merge_"+itos(l)+"_"+itos(l+m-2)+".root").c_str());
+
               int l=1;
-              bool mybool =true;
+              bool mybool = true;
               int j=0;
 
               for(int k=0;k<K+1;++k){
@@ -256,9 +260,10 @@ for (size_t j = 0; j < 64; j++) {
 
             // open file and set TTree
             TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m)+"/merge_"+itos(l)+"_"+itos(l+m-1)+".root").c_str());
+
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
-          //  cout<<"l = "<<l<<endl;
+            cout<<"l = "<<l<<endl;
             int Entries_exp = texp -> GetEntries();
           //  cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
 
@@ -301,7 +306,7 @@ for (size_t j = 0; j < 64; j++) {
                             t++;
 
 
-                              for (int p = 0; p < ene; ++p){
+                              for (int p = 0; p < nSavedPix; ++p){
 
                                   int x_resta;
                                   int y_resta;
@@ -313,7 +318,9 @@ for (size_t j = 0; j < 64; j++) {
                                   if (k==0) {
                                     x_resta=xPix[p]-list_m1[i][0];
                                     y_resta=yPix[p]-list_m1[i][1];
-                                    }else{
+                    //                cout << "x_resta= " << x_resta << " y_resta= " << y_resta << endl;
+                    //                cout << " i= " << i << " i= " << i << endl;
+                                  }else{
                                       x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
                                       y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
                                   }
@@ -323,6 +330,7 @@ for (size_t j = 0; j < 64; j++) {
                                       if (x_resta==0 && y_resta==0){
                                       h_exp_e[m-1]->Fill(e);
                                       list_m1[of_list_m1[k-1]+i][m+1]=e;
+                                      list_m1[of_list_m1[k-1]+i][7]=l;
 
 //                                      cout << "m= " <<m << endl;
                                     //  cout << t << endl;
@@ -342,6 +350,7 @@ for (size_t j = 0; j < 64; j++) {
             	   }
                 }
                 if (l==1){mybool = false;}
+                f_exp->Close();
                }
               }
 
@@ -368,11 +377,11 @@ c1->cd(5);
 h_exp_e[4]->Draw("HIST E1 same");
 */
 
-for (size_t j = 0; j < 500; j++) {
-    cout << "list of summ " << list_m1[j][2] << " "  << list_m1[j][3] << " " << list_m1[j][4] << " " << list_m1[j][5] << " " <<   list_m1[j][6] << endl;
+for (size_t j = 0; j < 250; j++) {
+   cout << "list of summ " << list_m1[j][0] << " " << list_m1[j][1] << " " << list_m1[j][2] << " "  << list_m1[j][3] << " " << list_m1[j][4] << " " << list_m1[j][5] << " " <<   list_m1[j][6] << " " <<   list_m1[j][7] << endl;
 
 }
-
+/*
 int equis[1828];
 int e1[1828]; int e2[1828]; int e3[1828]; int e4[1828]; int e5[1828];
 for (size_t i = 0; i < 1828; i++) {
@@ -400,6 +409,9 @@ mg->Add(gr4);
 mg->Add(gr5);
 
 mg->Draw("AP");
+
+*/
+
 
 
 /*
