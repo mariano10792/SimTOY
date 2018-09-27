@@ -97,7 +97,7 @@ void cluster_follower3(){
 cout<<"min ePix: "<< minePix<<endl;
 					int M=5; //this will be done in order to look initially at fits 1+M*k k>=0 (1,6,11,16,etc)
           int I=0; //this integer is used for the fake run
-          int K=24; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
+          int K=5; //  because 24*M+1=121 and we got 127 fits (with this we go til 126).
           int i=0; //length of the m=1 events list (list_m1)
 
 					//ofstream myfile;
@@ -235,11 +235,12 @@ for (int i = 0; i <K+1; i++) {
 
 for (size_t j = 0; j < K+1; j++) {
 //  cout << "list " << list_m1[j][2] << endl;
-// cout << "list " << of_list_m1[j] << endl;
-// cout << "list_bis " << of_list_m1_bis[j] << endl;
+//  cout << "of_list_m1 " << of_list_m1[j] << endl;
+//  cout << "of_list_m1_bis " << of_list_m1_bis[j] << endl;
 }
 
-
+int x_resta;
+int y_resta;
 
 
 
@@ -280,17 +281,17 @@ for (size_t j = 0; j < K+1; j++) {
             texp->GetEntry(i_event);
 
             //			if (ohdu == ohdu_numer) {
-                  if (e>0.5 && e<10000){  // number of electrons
+                  if (e>0.5 && e<emax){  // number of electrons
                     if (n==ene){
 
                       // Check if one of the pixels in the cluster is smaller that minePix
-                      bool noLowPixInCluster = true;
-                      for (int p = 0; p < nSavedPix; ++p){
-                        if(ePix[p]<minePix){
-                          noLowPixInCluster = false;
-                          break;
-                        }
-                      }
+                      // bool noLowPixInCluster = true;
+                      // for (int p = 0; p < nSavedPix; ++p){
+                      //   if(ePix[p]<minePix){
+                      //     noLowPixInCluster = false;
+                      //     break;
+                      //   }
+                      // }
                       bool noBadTransferInCluster = true;
                       for (int p = 0; p < nSavedPix; ++p){
                         if(xPix[p]==305){
@@ -299,51 +300,67 @@ for (size_t j = 0; j < K+1; j++) {
                         }
                       }
 
-                       if (noLowPixInCluster){
+
                         if (noBadTransferInCluster){
-                         if (xBary>250 && xBary<490){
-                          if (yBary>3 && yBary<48){
+                         if (xBary>250 && xBary<490 && yBary>3 && yBary<48){
                             t++;
 
 
-                              for (int p = 0; p < nSavedPix; ++p){
 
-                                  int x_resta;
-                                  int y_resta;
 
-                                  //this loop
                                   for (int i=0; i<of_list_m1_bis[k];i++){
 
+
+                                    for (int p = 0; p < nSavedPix; ++p){
                                   //k=0 is the first fits so it needs a different code for the x(y)_resta calculation. No big deal.
-                                  if (k==0) {
-                                    x_resta=xPix[p]-list_m1[i][0];
-                                    y_resta=yPix[p]-list_m1[i][1];
-                    //                cout << "x_resta= " << x_resta << " y_resta= " << y_resta << endl;
-                    //                cout << " i= " << i << " i= " << i << endl;
-                                  }else{
-                                      x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
-                                      y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
-                                  }
+                                        if (k==0) {
+                                          x_resta=xPix[p]-list_m1[i][0];
+                                          y_resta=yPix[p]-list_m1[i][1];
+                          //                cout << "x_resta= " << x_resta << " y_resta= " << y_resta << endl;
+                          //                cout << " i= " << i << " i= " << i << endl;
+                                        }else{
+                                            x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
+                                            y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
+                                        }
 
-
-                          //          We found it! save it.
-                                      if (x_resta==0 && y_resta==0){
+                                        if (x_resta==0 && y_resta==0){
+                                          // cout << "cacaca   "  << i  << endl;
+                                           break;}
+                                    }
+                                    // cout << "caquita   "  << i  << endl;
+                                  //  list_m1[of_list_m1[k-1]+i][m+1]=list_m1[of_list_m1[k-1]+i][m];
+                                    if (x_resta==0 && y_resta==0){
                                       h_exp_e[m-1]->Fill(e);
                                       list_m1[of_list_m1[k-1]+i][m+1]=e;
                                       list_m1[of_list_m1[k-1]+i][7]=l;
-
-//                                      cout << "m= " <<m << endl;
-                                    //  cout << t << endl;
+                                    //  cout << "caqueeeeeeeeeeeeeeeeeeeeeeeeeeeeEeeeEeeEe   "  << i  << endl;
                                       break;
                                     }else{
+                                    //  cout << "cacaaaaaaaaaaaaaaaaaaaaaaaaaaaa   "  << i  << endl;
+                                    }
 
-                                      continue;}
+
+                          //          We found it! save it.
+
+
+                                  //     if (x_resta==0 && y_resta==0){
+                                  //     h_exp_e[m-1]->Fill(e);
+                                  //     list_m1[of_list_m1[k-1]+i][m+1]=e;
+                                  //     list_m1[of_list_m1[k-1]+i][7]=l;
+                                  //     cout << "caconaaaaaaa   "  << i << endl;
+                                  //     //  cout << "m= " <<m << endl;
+                                  //     //
+                                  //     //  continue;
+                                  //   break;}
+                                  //
+                                  // if (x_resta!=0){ cout << "caca   "  << i  << endl; }
+
 
                                   }
-                              }
-                            }
+                              //} //for of the p < nSavedPix
+
                           }
-                        }
+
                       }
                     }
                   }
