@@ -40,7 +40,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   int ohdu_numer = 4;
 //number of bins to take into account for chi2
   int bines = 20;
-  float minePix = 0; // will be clasified as 1e-
+  float minePix = 0.5; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +90,7 @@ string itos(const int i){
 
 
 
-void cluster_follower3(){
+void cluster_follower4caca(){
 
 
 
@@ -116,10 +116,8 @@ cout<<"min ePix: "<< minePix<<endl;
 
 //As said, this part of the code creates a list of clusters with no merging (1.fits, 6.fits, etc).
 
-
-
           int of_list_m1[K+1];
-          int list_m1[50000][10];
+          int list_m1[50000][2];
           int l=1;
           bool mybool =true; //this bool is need for the l increment loop to function.
                int j=0; //position in the list_m1 list
@@ -132,11 +130,11 @@ cout<<"min ePix: "<< minePix<<endl;
           if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
           TTree * texp = (TTree*) f_exp->Get("hitSumm");
           int Entries_exp = texp -> GetEntries();
-          //cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
+          cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
           Enable_and_Set_Branches(texp);
 
 
-          //cout<<"l = "<<l<<endl;
+          cout<<"l = "<<l<<endl;
 
 
           // Get information from trees///////////////////////////////////////////
@@ -150,7 +148,7 @@ cout<<"min ePix: "<< minePix<<endl;
           texp->GetEntry(i_event);
 
           //			if (ohdu == ohdu_numer) {
-                if (e>emin && e<emax){  // number of electrons
+                if (e>0.5 && e<emax){  // number of electrons
                   if (n==ene){
 
                     // Check if one of the pixels in the cluster is smaller that minePix
@@ -161,7 +159,6 @@ cout<<"min ePix: "<< minePix<<endl;
                         break;
                       }
                     }
-
                     bool noBadTransferInCluster = true;
                     for (int p = 0; p < nSavedPix; ++p){
                       if(xPix[p]==305){
@@ -170,10 +167,10 @@ cout<<"min ePix: "<< minePix<<endl;
                       }
                     }
 
-                    //if (noLowPixInCluster){
-                      //if (noBadTransferInCluster){
-                        //if (xBary>250 && xBary<490){
-                          //if (yBary>3 && yBary<48){
+                    if (noLowPixInCluster){
+                      if (noBadTransferInCluster){
+                        if (xBary>250 && xBary<490){
+                          if (yBary>3 && yBary<48){
                               t++;
 
                                 i++;
@@ -182,9 +179,7 @@ cout<<"min ePix: "<< minePix<<endl;
 
                                 list_m1[j][0]=xPix[0];
                                 list_m1[j][1]=yPix[0];
-                                list_m1[j][2]=e;
                                 h_exp_e[0]->Fill(e);
-
                                 j++;
 
 
@@ -205,10 +200,10 @@ cout<<"min ePix: "<< minePix<<endl;
                               // }
                               // cout << "t= " <<t<<endl;
 
-                          //}
-                         //}
-                    //  }
-                  //  }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
           	   }
@@ -220,7 +215,7 @@ cout<<"min ePix: "<< minePix<<endl;
 cout << i << endl;
 
 // of_list_m1 create a CUMULATIVE list of elements (64,128,228,etc) and of_list_m1_bis creates a list of the
-// number of elements in each fits (64,64,100,etc). Both are used in the compare loop downwards.
+// number of elements in each fit (64,64,100,etc). Both are used in the compare loop downwards
 
 int of_list_m1_bis[K+1];
 for (int i = 0; i <K+1; i++) {
@@ -233,14 +228,11 @@ for (int i = 0; i <K+1; i++) {
 
 //check the list
 
-for (size_t j = 0; j < K+1; j++) {
-//  cout << "list " << list_m1[j][2] << endl;
-//  cout << "of_list_m1 " << of_list_m1[j] << endl;
-//  cout << "of_list_m1_bis " << of_list_m1_bis[j] << endl;
+for (size_t j = 0; j < 64; j++) {
+  cout << "list " << list_m1[j][1] << endl;
 }
 
-int x_resta;
-int y_resta;
+
 
 
 
@@ -248,22 +240,10 @@ int y_resta;
 
 
 
-            for(int m=2;m<5;++m){
-              //TFile::Close(("../mejor/grupos_de_"+itos(m)+"/merge_"+itos(l)+"_"+itos(l+m-2)+".root").c_str());
-
+            for(int m=2;m<6;++m){
               int l=1;
-              bool mybool = true;
+              bool mybool =true;
               int j=0;
-
-              // for(int k=0;k<K+1;++k){
-              //   for (int i=0; i<of_list_m1_bis[k];i++){
-              //     if (k==0) {
-              //       list_m1[i][m+1]=list_m1[i][m];
-              //     }else{
-              //       list_m1[of_list_m1[k-1]+i][m+1]=list_m1[of_list_m1[k-1]+i][m];
-              //     }
-              //   }
-              // }
 
               for(int k=0;k<K+1;++k){
 
@@ -271,12 +251,11 @@ int y_resta;
 
             // open file and set TTree
             TFile * f_exp = TFile::Open(("../mejor/grupos_de_"+itos(m)+"/merge_"+itos(l)+"_"+itos(l+m-1)+".root").c_str());
-
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
             cout<<"l = "<<l<<endl;
             int Entries_exp = texp -> GetEntries();
-          //  cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
+            cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
 
             Enable_and_Set_Branches(texp);
 
@@ -291,17 +270,17 @@ int y_resta;
             texp->GetEntry(i_event);
 
             //			if (ohdu == ohdu_numer) {
-                  if (e>0.5 && e<100000){  // number of electrons
+                  if (e>0.5 && e<emax){  // number of electrons
                     if (n==ene){
 
                       // Check if one of the pixels in the cluster is smaller that minePix
-                      // bool noLowPixInCluster = true;
-                      // for (int p = 0; p < nSavedPix; ++p){
-                      //   if(ePix[p]<minePix){
-                      //     noLowPixInCluster = false;
-                      //     break;
-                      //   }
-                      // }
+                      bool noLowPixInCluster = true;
+                      for (int p = 0; p < nSavedPix; ++p){
+                        if(ePix[p]<minePix){
+                          noLowPixInCluster = false;
+                          break;
+                        }
+                      }
                       bool noBadTransferInCluster = true;
                       for (int p = 0; p < nSavedPix; ++p){
                         if(xPix[p]==305){
@@ -310,122 +289,87 @@ int y_resta;
                         }
                       }
 
-
+                      if (noLowPixInCluster){
                         if (noBadTransferInCluster){
-                         if (xBary>250 && xBary<490 && yBary>3 && yBary<48){
+                        if (xBary>250 && xBary<490){
+                          if (yBary>3 && yBary<48){
                             t++;
 
-                                  cout << "k = "  << k  << endl;
 
+                              for (int p = 0; p < ene; ++p){
 
+                                  int x_resta;
+                                  int y_resta;
+
+                                  //this loop
                                   for (int i=0; i<of_list_m1_bis[k];i++){
-                                    for (int p = 0; p < nSavedPix; ++p){
+
                                   //k=0 is the first fits so it needs a different code for the x(y)_resta calculation. No big deal.
-                                        if (k==0) {
-                                          x_resta=xPix[p]-list_m1[i][0];
-                                          y_resta=yPix[p]-list_m1[i][1];
-                                        }else{
-                                          x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
-                                          y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
-                                        }
-
-                                        if (x_resta==0 && y_resta==0){
-                                          // cout << "cacaca   "  << of_list_m1[k-1]+i  << endl;
-                                          break;
-                                        }
-                                    }
-                                      // cout << "caquita   "  << of_list_m1[k-1]+i  << endl;
-                                      // list_m1[of_list_m1[k-1]+i][m+1]=list_m1[of_list_m1[k-1]+i][m];
-                                    if (x_resta==0 && y_resta==0){
-                                      h_exp_e[m-1]->Fill(e);
-                                      if (k==0) {
-                                        list_m1[i][m+1]=e;
-                                        list_m1[i][7]=i;
-                                        list_m1[i][6]=n;
-                                      }else{
-                                        list_m1[of_list_m1[k-1]+i][m+1]=e;
-                                        list_m1[of_list_m1[k-1]+i][7]=of_list_m1[k-1]+i;
-                                        list_m1[of_list_m1[k-1]+i][6]=n;
-                                    }
-                                      //
-                                      // cout << "caqueeeeeeeeeeeeeeeeeeeeeeeeeeeeEeeeEeeEe   "  << of_list_m1[k-1]+i  << endl;
-
+                                  if (k==0) {
+                                    x_resta=xPix[p]-list_m1[i][0];
+                                    y_resta=yPix[p]-list_m1[i][1];
                                     }else{
-                                      // cout << "cacaaaaaaaaaaaaaaaaaaaaaaaaaaaa   "  << of_list_m1[k-1]+i  << endl;
-                                    }
+                                      x_resta=xPix[p]-list_m1[of_list_m1[k-1]+i][0];
+                                      y_resta=yPix[p]-list_m1[of_list_m1[k-1]+i][1];
                                   }
-                              //} //for of the p < nSavedPix
 
+
+                          //          We found it! save it.
+                                      if (x_resta==0 && y_resta==0){
+                                      h_exp_e[m-1]->Fill(e);
+
+//                                      cout << "m= " <<m << endl;
+                                    //  cout << t << endl;
+                                      break;
+                                    }else{
+
+                                      continue;}
+
+                                  }
+                              }
+                            }
                           }
-
+                        }
                       }
                     }
                   }
             	   }
                 }
                 if (l==1){mybool = false;}
-                f_exp->Close();
                }
               }
 
-//
-// TCanvas *c1 = new TCanvas("c4","",200,10,1700,1000);
-// //c1->SetGrid();
-// c1->Divide(3,2);
-// gStyle->SetOptStat(1002211);
-// for (size_t i = 0; i < 4; i++) {
-// //h_exp_e[i]->SetMarkerStyle(0);
-// //h_exp_e[i]->SetMarkerSize(2);
-// //h_exp_e[i] -> SetLineColor(kRed);
-// }
-//
-// c1->cd(1);
-// h_exp_e[0]->Draw("HIST E1");
-// c1->cd(2);
-// h_exp_e[1]->Draw("HIST E1 same");
-// c1->cd(3);
-// h_exp_e[2]->Draw("HIST E1 same");
-// c1->cd(4);
-// h_exp_e[3]->Draw("HIST E1 same");
-// c1->cd(5);
-// h_exp_e[4]->Draw("HIST E1 same");
+              int equis[1828];
+              int e1[1828]; int e2[1828]; int e3[1828]; int e4[1828]; int e5[1828];
+              for (size_t i = 0; i < 1828; i++) {
+                e1[i]=list_m1[i][2];
+                e2[i]=list_m1[i][3];
+                e3[i]=list_m1[i][4];
+                e4[i]=list_m1[i][5];
+                e5[i]=list_m1[i][6];
+                equis[i]=i;
+              }
 
 
-//of_list_m1[K]
-for (size_t j = 0; j < 465; j++) {
-   cout << "list of summ " << list_m1[j][0] << " " << list_m1[j][1] << " " << list_m1[j][2] << " "  << list_m1[j][3] << " " << list_m1[j][4] << " " << list_m1[j][5] << " " <<   list_m1[j][6] << " " <<   list_m1[j][7] << endl;
+              TGraph *gr1 = new TGraph(1828,equis,e1);
+              TGraph *gr2 = new TGraph(1828,equis,e2);
+              TGraph *gr3 = new TGraph(1828,equis,e3);
+              TGraph *gr4 = new TGraph(1828,equis,e4);
+              TGraph *gr5 = new TGraph(1828,equis,e5);
 
-}
-/*
-int equis[1828];
-int e1[1828]; int e2[1828]; int e3[1828]; int e4[1828]; int e5[1828];
-for (size_t i = 0; i < 1828; i++) {
-  e1[i]=list_m1[i][2];
-  e2[i]=list_m1[i][3];
-  e3[i]=list_m1[i][4];
-  e4[i]=list_m1[i][5];
-  e5[i]=list_m1[i][6];
-  equis[i]=i;
-}
+              TMultiGraph *mg = new TMultiGraph();
+
+              mg->Add(gr1);
+              mg->Add(gr2);
+              mg->Add(gr3);
+              mg->Add(gr4);
+              mg->Add(gr5);
+
+              mg->Draw("AP");
 
 
-TGraph *gr1 = new TGraph(1828,equis,e1);
-TGraph *gr2 = new TGraph(1828,equis,e2);
-TGraph *gr3 = new TGraph(1828,equis,e3);
-TGraph *gr4 = new TGraph(1828,equis,e4);
-TGraph *gr5 = new TGraph(1828,equis,e5);
 
-TMultiGraph *mg = new TMultiGraph();
 
-mg->Add(gr1);
-mg->Add(gr2);
-mg->Add(gr3);
-mg->Add(gr4);
-mg->Add(gr5);
-
-mg->Draw("AP");
-
-*/
 
 
 
