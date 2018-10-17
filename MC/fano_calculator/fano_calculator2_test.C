@@ -5,10 +5,10 @@
 #include "TFile.h"
 #include "TObject.h"
 #include "TKey.h"
-#include "TF1.h"
 #include "TString.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TF1.h"
 #include "TGraphAsymmErrors.h"
 #include "TMath.h"
 #include "TCanvas.h"
@@ -33,11 +33,11 @@ void Enable_and_Set_Branches(TTree* & tree);
 
 // Setting parameters //////////////////////////////////////////////////
 
-// range for the number of electrons per cluster
-  int emin =1880 ; int emax = 1980;
+  // range for the number of electrons per cluster
+  int emin =1530 ; int emax = 1610;
   int ohdu_numer = 4;
-//number of bins to take into account for chi2
-  int bines = 100;
+  //number of bins to take into account for chi2
+  int bines = 20;
   float minePix = 0; // will be clasified as 1e-
 
   ////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = 15;
+  int nbins = 6;
 
   const int maxClusterSize = 50000;
 
@@ -86,52 +86,47 @@ void fano_calculator2_test(){
 // Get input files//////////////////////////////////////////////////////
 
 cout<<"min ePix: "<< minePix<<endl;
-					int M=1;
 
 					ofstream myfile;
-					myfile.open ("../mejor/figures/example.txt");
+					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55/example.txt");
 
 
             //TFile * f_exp = TFile::Open("./55Fe_exp.root");
-            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/30Sep2018/30Sep2018/rootfiles/clustered/mediciones_buenas/output_2.root");
+            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55/output_2.root");
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
 
 
 
-            TH1D * h_exp_e[nbins+1];
-            TString histname_tmp_exp;
             //for the total of clusters
-
-
-            TH1D * h_exp_e_total  =  new TH1D("h_exp_e_total","", 30, emin, emax);
+            TH1D * h_exp_e_total  =  new TH1D("h_exp_e_total","", bines, emin, emax);
             h_exp_e_total -> Sumw2();
 
             //for each n
+            TH1D * h_exp_e[nbins+1];
+            TString histname_tmp_exp;
             for(int ystarbin=0;ystarbin<nbins+1;++ystarbin){
             histname_tmp_exp  = "h_exp_e";
             histname_tmp_exp += ystarbin;
-            h_exp_e[ystarbin] = new TH1D(histname_tmp_exp.Data(),"",30,emin,emax);
+            h_exp_e[ystarbin] = new TH1D(histname_tmp_exp.Data(),"",bines,emin,emax);
             h_exp_e[ystarbin]->Sumw2();
             }
 
+            // Get information from trees///////////////////////////////////////////
             int Entries_exp = texp -> GetEntries();
             cout<<"Entries in experimental data file: "<<Entries_exp<<endl;
-
             Enable_and_Set_Branches(texp);
 
-          // Get information from trees///////////////////////////////////////////
-				// Get information from trees///////////////////////////////////////////
-				vector<double> events_exp(50000);
-				vector<double> mean_exp_fit(nbins+1);
-				vector<double> sigma_exp_fit(nbins+1);
-				vector<double> fano_exp_fit(nbins+1);
+          	vector<double> events_exp(50000);
 
-				vector<double> mean_exp_fit_error(nbins+1);
-				vector<double> sigma_exp_fit_error(nbins+1);
-				vector<double> fano_exp_fit_error(nbins+1);
+    				vector<double> mean_exp_fit(nbins+1);
+    				vector<double> sigma_exp_fit(nbins+1);
+    				vector<double> fano_exp_fit(nbins+1);
+            vector<double> events_exp_fit(50000);
 
-				vector<double> events_exp_fit(nbins+1);
+    				vector<double> mean_exp_fit_error(nbins+1);
+    				vector<double> sigma_exp_fit_error(nbins+1);
+    				vector<double> fano_exp_fit_error(nbins+1);
 
 
 				for (int ene=1; ene<nbins+1; ene++){
@@ -159,21 +154,12 @@ cout<<"min ePix: "<< minePix<<endl;
       								}
       							}
 
-      							 if (true){
-      								if (true){
-      								 if (true){
-      									if (true){
-
                  // cout << "i= "<< i << endl;
     									h_exp_e[ene]->Fill(e);
     									h_exp_e_total->Fill(e);
-
     									events_exp[i]=e;
 									    i++;
-                          }
-                        }
-                      }
-                    }
+
 									}
 								}
 					//		}
@@ -200,11 +186,28 @@ cout<<"min ePix: "<< minePix<<endl;
 
 					}
 						// save to file
-						myfile << "Mean" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" << " # Events for M="<< 1 <<", increasing n" <<endl;
+						myfile << "Mean" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" <<", increasing n" <<endl;
 						for(int i = 1; i < nbins+1; i ++) {
 						myfile  << mean_exp_fit[i]  << "	" << sigma_exp_fit[i] << "	" << fano_exp_fit[i] << "	" << fano_exp_fit_error[i]  << "	" <<  events_exp_fit[i] << endl;
 						}
 
+            h_exp_e_total->Fit("gaus");
+            TF1 *fit2 = (TF1*)h_exp_e_total->GetFunction("gaus");
+
+
+            h_exp_e_total->Draw("HIST E2");
+            fit2->Draw("HIST same");
+
+            sigma_exp_fit[0]= fit2->GetParameter(2);
+						sigma_exp_fit_error[0]= fit2->GetParError(2);
+						mean_exp_fit[0]= fit2->GetParameter(1);
+						mean_exp_fit_error[0]= fit2->GetParError(1);
+						fano_exp_fit[0]= pow(sigma_exp_fit[0],2)/mean_exp_fit[0];
+						fano_exp_fit_error[0]= pow(pow(2*sigma_exp_fit[0]*sigma_exp_fit_error[0]/mean_exp_fit[0],2)+pow(mean_exp_fit_error[0]*sigma_exp_fit[0]*sigma_exp_fit[0]/(mean_exp_fit[0]*mean_exp_fit[0]),2),0.5);
+						events_exp_fit[0]=h_exp_e_total->GetEntries();
+
+            myfile  << "n=1,2,3,4" << endl;
+            myfile  << mean_exp_fit[0]  << "	" << sigma_exp_fit[0] << "	" << fano_exp_fit[0] << "	" << fano_exp_fit_error[0]  << "	" <<  events_exp_fit[0] << endl;
 
 
 	myfile.close();
