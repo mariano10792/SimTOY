@@ -34,7 +34,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
   // range for the number of electrons per cluster
-  int emin =1530 ; int emax = 1610;
+  int emin =1500 ; int emax = 1570 ;
   int ohdu_numer = 4;
   //number of bins to take into account for chi2
   int bines = 20;
@@ -88,11 +88,11 @@ void fano_calculator2_test(){
 cout<<"min ePix: "<< minePix<<endl;
 
 					ofstream myfile;
-					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55/example.txt");
+					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/21Oct2018/T100/afterskipper2root/clustered/example.txt");
 
 
             //TFile * f_exp = TFile::Open("./55Fe_exp.root");
-            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55/output_2.root");
+            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/21Oct2018/T100/afterskipper2root/clustered/output_2.root");
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
 
@@ -137,33 +137,17 @@ cout<<"min ePix: "<< minePix<<endl;
 				//			if (ohdu == ohdu_numer) {
 								if (e>emin && e<emax){  // number of electrons
                   if (n==ene){
-
-                    // Check if one of the pixels in the cluster is smaller that minePix
-      							bool noLowPixInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(ePix[p]<minePix){
-      									noLowPixInCluster = false;
-      									break;
-      								}
-      							}
-      							bool noBadTransferInCluster = true;
-      							for (int p = 0; p < nSavedPix; ++p){
-      								if(xPix[p]==305){
-      									noBadTransferInCluster = false;
-      									break;
-      								}
-      							}
-
-                 // cout << "i= "<< i << endl;
     									h_exp_e[ene]->Fill(e);
     									h_exp_e_total->Fill(e);
     									events_exp[i]=e;
 									    i++;
-
 									}
 								}
 					//		}
 						}
+
+
+
 						// aca calculamos varianza y media
 
 						h_exp_e[ene]->Fit("gaus");
@@ -206,7 +190,7 @@ cout<<"min ePix: "<< minePix<<endl;
 						fano_exp_fit_error[0]= pow(pow(2*sigma_exp_fit[0]*sigma_exp_fit_error[0]/mean_exp_fit[0],2)+pow(mean_exp_fit_error[0]*sigma_exp_fit[0]*sigma_exp_fit[0]/(mean_exp_fit[0]*mean_exp_fit[0]),2),0.5);
 						events_exp_fit[0]=h_exp_e_total->GetEntries();
 
-            myfile  << "n=1,2,3,4" << endl;
+            myfile  << "Para todos los n" << endl;
             myfile  << mean_exp_fit[0]  << "	" << sigma_exp_fit[0] << "	" << fano_exp_fit[0] << "	" << fano_exp_fit_error[0]  << "	" <<  events_exp_fit[0] << endl;
 
 
